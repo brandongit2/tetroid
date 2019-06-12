@@ -1,4 +1,4 @@
-package net.brandontsang.tetroid;
+package net.brandontsang.tetroid.engine;
 
 public class Light extends GameObject {
 }

@@ -2,17 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c0ac0490-decf-4a8d-8e8e-7bfc4a8fe001" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/lwjgl.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/ShaderProgram.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/Util.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.frag" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.vert" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tetroid.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/OrbitCamera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Camera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/GameObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Light.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Light.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Mesh.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Mesh.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Model.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Renderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Scene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/ShaderProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/ShaderProgram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Util.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameLoop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/shaders/vertex.glsl" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/shaders/vertex.glsl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tetroid.iml" beforeDir="false" afterPath="$PROJECT_DIR$/tetroid.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,24 +29,78 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Main.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="53" column="94" selection-start-line="53" selection-start-column="94" selection-end-line="53" selection-end-column="94" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3116#3117#0" expanded="true" />
+                <element signature="e#3148#3149#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/ShaderProgram.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="47">
+              <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Camera.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="34" column="44" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1648#1649#0" expanded="true" />
+                <element signature="e#1685#1686#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/OrbitCamera.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="98" column="31" selection-start-line="98" selection-start-column="31" selection-end-line="98" selection-end-column="31" />
+            <state relative-caret-position="228">
+              <caret line="24" column="73" selection-start-line="24" selection-start-column="73" selection-end-line="24" selection-end-column="73" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Mesh.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3404">
+              <caret line="159" column="114" selection-start-line="159" selection-start-column="114" selection-end-line="159" selection-end-column="114" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#4095#4096#0" expanded="true" />
+                <element signature="e#6767#6768#0" expanded="true" />
+                <element signature="e#6798#6799#0" expanded="true" />
+                <element signature="e#6831#6832#0" expanded="true" />
+                <element signature="e#6867#6868#0" expanded="true" />
+                <element signature="e#6981#6982#0" expanded="true" />
+                <element signature="e#7020#7021#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/Util.java">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Window.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="211">
-              <caret line="10" column="33" lean-forward="true" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+            <state relative-caret-position="1188">
+              <caret line="59" column="23" selection-start-line="59" selection-start-column="23" selection-end-line="59" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -49,33 +109,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/ShaderProgram.java">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Renderer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="401">
-              <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
+            <state relative-caret-position="222">
+              <caret line="15" column="95" selection-start-line="15" selection-start-column="95" selection-end-line="15" selection-end-column="95" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#1203#1204#0" expanded="true" />
-                <element signature="e#1230#1231#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.frag">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/shaders/vertex.glsl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+            <state relative-caret-position="115">
+              <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.vert">
+        <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameLoop.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="92">
-              <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+            <state relative-caret-position="428">
+              <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -90,6 +148,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>currentObj</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -98,18 +161,43 @@
       <list>
         <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/shader.vert" />
         <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Util.java" />
-        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/ShaderProgram.java" />
         <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.vert" />
         <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.frag" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/ShaderProgram.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Window.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/GameLoop.java" />
         <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Main.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Cube.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Camera.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Scene.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Light.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/GameObject.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/Mesh.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Cube.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/GameObject.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/MeshGroup.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Util.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Scene.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Model.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/ShaderProgram.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Mesh.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Window.java" />
+        <option value="$PROJECT_DIR$/res/models/cube.obj" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameLoop.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Renderer.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/shaders/vertex.glsl" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Main.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Camera.java" />
+        <option value="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/OrbitCamera.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-18" />
-    <option name="y" value="-18" />
-    <option name="width" value="1636" />
-    <option name="height" value="1076" />
+    <option name="x" value="-36" />
+    <option name="y" value="-36" />
+    <option name="width" value="2556" />
+    <option name="height" value="1683" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -117,6 +205,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -127,6 +217,17 @@
             <path>
               <item name="tetroid" type="b2602c69:ProjectViewProjectNode" />
               <item name="tetroid" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tetroid" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
+              <item name="res" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tetroid" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -139,6 +240,21 @@
               <item name="tetroid" type="b2602c69:ProjectViewProjectNode" />
               <item name="tetroid" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
+              <item name="engine" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tetroid" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="tetroid" type="b2602c69:ProjectViewProjectNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="tetroid" type="462c0819:PsiDirectoryNode" />
               <item name="tetroid" type="462c0819:PsiDirectoryNode" />
               <item name="shaders" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -146,17 +262,15 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1558038466805" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1560379246549" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../RacingGame" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -179,7 +293,7 @@
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="net.brandontsang.tetroid.Main" />
+      <option name="MAIN_CLASS_NAME" value="net.brandontsang.tetroid.tetroid.Main" />
       <module name="tetroid" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -218,14 +332,14 @@
     <frame x="-6" y="-6" width="1719" height="932" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14491881" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49615383" visible="true" weight="0.16235718" />
+      <window_info id="Structure" order="1" sideWeight="0.50384617" side_tool="true" weight="0.15874925" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32948717" />
       <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49969932" visible="true" weight="0.32948717" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -243,6 +357,66 @@
       <window_info anchor="right" id="Maven" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14491881" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Image Layers" order="2" />
+      <window_info id="Designer" order="3" />
+      <window_info id="Capture Tool" order="4" />
+      <window_info id="Favorites" order="5" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32948717" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49969932" weight="0.32948717" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32948717" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50030065" side_tool="true" weight="0.32948717" />
+      <window_info anchor="bottom" id="Version Control" order="9" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.49969932" weight="0.32948717" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="right" id="Theme Preview" order="4" />
+      <window_info anchor="right" id="Maven" order="5" />
+      <window_info anchor="right" id="Palette&#9;" order="6" />
+    </layout-to-restore>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="evaluateExpression">
+      <expression>
+        <expression-string>vertices[0]</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>vertices.length</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>vertices[currentObject].length</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>_vertex[i].toString()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>System.out.println(_vertex[i].toString());</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>System.out.println(_vertex[0].toString());</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/pom.xml" />
@@ -260,57 +434,175 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Light.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="253">
+          <caret line="14" column="77" selection-start-line="14" selection-start-column="77" selection-end-line="14" selection-end-column="77" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#520#521#0" expanded="true" />
+            <element signature="e#547#548#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Cube.java" />
     <entry file="jar://$PROJECT_DIR$/lib/lwjgl-opengl-sources.jar!/org/lwjgl/opengl/GL11.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="8020" selection-start-line="8020" selection-end-line="8020" />
+        <state relative-caret-position="108">
+          <caret line="83" column="14" lean-forward="true" selection-start-line="83" selection-start-column="14" selection-end-line="83" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/Util.java">
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Util.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="10" column="33" lean-forward="true" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
+        <state relative-caret-position="115">
+          <caret line="9" column="60" selection-start-line="9" selection-start-column="60" selection-end-line="9" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.vert">
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/GameObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+        <state relative-caret-position="276">
+          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/ShaderProgram.java">
+    <entry file="jar://$PROJECT_DIR$/lib/lwjglx-debug-1.0.0-sources.jar!/org/lwjglx/debug/opengl/GL30.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="401">
-          <caret line="39" column="23" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
+        <state relative-caret-position="165">
+          <caret line="125" column="42" lean-forward="true" selection-start-line="125" selection-start-column="12" selection-end-line="125" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/shaders/fragment.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="45" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Scene.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1172">
+          <caret line="59" column="34" selection-start-line="59" selection-start-column="34" selection-end-line="59" selection-end-column="34" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1203#1204#0" expanded="true" />
-            <element signature="e#1230#1231#0" expanded="true" />
+            <element signature="e#992#993#0" expanded="true" />
+            <element signature="e#1013#1014#0" expanded="true" />
+            <element signature="e#1171#1172#0" expanded="true" />
+            <element signature="e#1216#1217#0" expanded="true" />
+            <element signature="e#1425#1426#0" expanded="true" />
+            <element signature="e#1451#1452#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/shaders/shader.frag">
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Model.java" />
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Mesh.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="4" column="12" selection-start-line="4" selection-start-column="12" selection-end-line="4" selection-end-column="12" />
+        <state relative-caret-position="3404">
+          <caret line="159" column="114" selection-start-line="159" selection-start-column="114" selection-end-line="159" selection-end-column="114" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6767#6768#0" expanded="true" />
+            <element signature="e#6798#6799#0" expanded="true" />
+            <element signature="e#6831#6832#0" expanded="true" />
+            <element signature="e#6867#6868#0" expanded="true" />
+            <element signature="e#6981#6982#0" expanded="true" />
+            <element signature="e#7020#7021#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/Main.java">
+    <entry file="file://$PROJECT_DIR$/res/models/cube.obj">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="98" column="31" selection-start-line="98" selection-start-column="31" selection-end-line="98" selection-end-column="31" />
+        <state relative-caret-position="207">
+          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameLoop.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="428">
+          <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Window.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1188">
+          <caret line="59" column="23" selection-start-line="59" selection-start-column="23" selection-end-line="59" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#4095#4096#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Renderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="222">
+          <caret line="15" column="95" selection-start-line="15" selection-start-column="95" selection-end-line="15" selection-end-column="95" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/shaders/vertex.glsl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="53" column="94" selection-start-line="53" selection-start-column="94" selection-end-line="53" selection-end-column="94" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3116#3117#0" expanded="true" />
+            <element signature="e#3148#3149#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/ShaderProgram.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="47">
+          <caret line="59" column="25" selection-start-line="59" selection-start-column="25" selection-end-line="59" selection-end-column="25" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/Camera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="34" column="44" selection-start-line="34" selection-start-column="44" selection-end-line="34" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1648#1649#0" expanded="true" />
+            <element signature="e#1685#1686#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/OrbitCamera.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="24" column="73" selection-start-line="24" selection-start-column="73" selection-end-line="24" selection-end-column="73" />
         </state>
       </provider>
     </entry>

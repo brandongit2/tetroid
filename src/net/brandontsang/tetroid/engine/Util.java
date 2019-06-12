@@ -1,13 +1,17 @@
-package net.brandontsang.tetroid;
+package net.brandontsang.tetroid.engine;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Util {
-    // Only reads UTF-8.
-    static String readFile(String path) throws IOException {
-        byte[] encoded = Files.readAllBytes(Paths.get(path));
-        return new String(encoded);
+    static byte[] readFile(String path) throws IOException {
+        return Files.readAllBytes(Paths.get(path));
+    }
+    
+    static String readFileAsString(String path) throws IOException {
+        return new String(readFile(path));
     }
 }

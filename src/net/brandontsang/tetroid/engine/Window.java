@@ -1,4 +1,4 @@
-package net.brandontsang.tetroid;
+package net.brandontsang.tetroid.engine;
 
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -10,8 +10,13 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
     private long window;
+    private int width;
+    private int height;
     
     public Window(int width, int height, String title) {
+        this.width = width;
+        this.height = height;
+        
         // Set window context hints.
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
@@ -29,6 +34,8 @@ public class Window {
         System.out.println("OpenGL version " + glGetString(GL_VERSION));
     
         glfwSetFramebufferSizeCallback(window, (long window, int w, int h) -> {
+            this.width = w;
+            this.height = h;
             glViewport(0, 0, w, h);
         });
     
@@ -47,9 +54,21 @@ public class Window {
         int xpos = (int) (screenWidth - width * xscale[0]) / 2;
         int ypos = (int) (screenHeight- height * yscale[0]) / 2;
         glfwSetWindowPos(window, xpos, ypos);
+    
+        // Enable depth testing.
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
     }
     
     public long pointer() {
-        return window;
+        return this.window;
+    }
+    
+    public int width() {
+        return this.width;
+    }
+    
+    public int height() {
+        return this.height;
     }
 }

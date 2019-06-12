@@ -1,9 +1,7 @@
-package net.brandontsang.tetroid;
+package net.brandontsang.tetroid.engine;
 
-public class GameObject {
-    private float x;
-    private float y;
-    private float z;
+abstract class GameObject {
+    float[] pos = new float[3];
     
     public GameObject() {
         move(0, 0, 0);
@@ -14,8 +12,8 @@ public class GameObject {
     }
     
     public void move(float x, float y, float z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.pos[0] = x;
+        this.pos[1] = y;
+        this.pos[2] = z;
     }
 }

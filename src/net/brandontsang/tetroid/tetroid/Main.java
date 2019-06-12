@@ -1,42 +1,64 @@
-package net.brandontsang.tetroid;
+package net.brandontsang.tetroid.tetroid;
 
-import org.lwjgl.BufferUtils;
+import net.brandontsang.tetroid.engine.*;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
-import java.nio.FloatBuffer;
+import java.io.IOException;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class Main {
     private Window window;
-    public static volatile boolean gameIsRunning = true;
-    
-    private static float[] vertices = new float[] {
-      -0.5f, -0.5f, 0.0f,
-       0.5f, -0.5f, 0.0f,
-       0.0f,  0.5f, 0.0f
-    };
     
     private ShaderProgram program;
-    private int vao;
+    private int           vao;
+            Scene         scene;
+    
+    private double prevMouseX = 0;
+    private double prevMouseY = 0;
+    // Since mouse input checks movement deltas, the first check will be erroneous. Don't check
+    // the first tick.
+    private boolean firstCall = true;
     
     private void run() {
         init();
         
-        Scene scene = new Scene();
+        scene = new Scene(window);
         
-        Cube cube = new Cube(1);
-        scene.add(cube);
+        program = new ShaderProgram();
+        program.createUniform("projectionMatrix");
+        program.createUniform("viewMatrix");
+        program.createUniform("modelMatrix");
+        scene.setShaderProgram(program);
         
-        Camera camera = new Camera();
-        scene.add(camera);
+        Mesh mesh;
+        try {
+            mesh = Mesh.fromFile("./res/models/monkey.obj");
+            scene.add(mesh);
+        } catch (IOException err) {
+            err.printStackTrace();
+            System.exit(1);
+        }
         
-        GameLoop.start();
-        RenderLoop.start();
+        OrbitCamera camera = new OrbitCamera(0.0f, 0.0f, 0.0f, 5.0f, 70.0f, 0.1f, 100f, window);
+        
+        int camId = scene.add(camera);
+        scene.setCurrentCamera(camId);
+    
+        glfwSetInputMode(window.pointer(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetCursorPosCallback(window.pointer(), (long evWindow, double mouseX, double mouseY) -> {
+            if (firstCall) {
+                firstCall = false;
+            } else {
+                camera.rotate((float) (mouseY - prevMouseY) / 10, (float) (mouseX - prevMouseX) / 10);
+            }
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
+        });
+        
+        GameLoop.start(scene, 10, 10, 15);
+        RenderLoop.start(scene);
         
         terminate();
     }
@@ -58,45 +80,16 @@ public class Main {
                 }
             }
         });
-        
-        program = new ShaderProgram();
-        
-        (new Thread(new GameLoop())).start();
-    
-        FloatBuffer verts = BufferUtils.createFloatBuffer(vertices.length);
-        verts.put(vertices);
-        verts.flip();
-    
-        vao = glGenVertexArrays();
-        glBindVertexArray(vao);
-        
-        int vbo = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, verts, GL_STATIC_DRAW);
-        
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0L);
-        glEnableVertexAttribArray(0);
-    }
-    
-    private void render() {
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-        glUseProgram(program.getProgram());
-        glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        
-        glfwSwapBuffers(window.pointer());
-        glfwPollEvents();
     }
     
     private void terminate() {
-        gameIsRunning = false;
+        GameLoop.stop();
+        RenderLoop.stop();
         
         // Free the window callbacks and destroy the window
         glfwFreeCallbacks(window.pointer());
         glfwDestroyWindow(window.pointer());
-    
+        
         // Terminate GLFW and free the error callback
         glfwTerminate();
         glfwSetErrorCallback(null).free();

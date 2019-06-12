@@ -1,21 +1,44 @@
-package net.brandontsang.tetroid;
+package net.brandontsang.tetroid.tetroid;
 
-public class GameLoop implements Runnable {
-    private final long msPerTick = 1000 / 20;
+import net.brandontsang.tetroid.engine.Scene;
+
+class GameLoop implements Runnable {
+    private static final long nsPerTick = 1000000000 / 60;
+    private static boolean run = false;
+    
+    private int[][][] lattice;
+    
+    private Scene scene;
+    
+    public GameLoop(Scene scene, int xSize, int ySize, int zSize) {
+        this.scene = scene;
+        this.lattice = new int[xSize][ySize][zSize];
+    }
     
     public void run() {
-        long time = System.currentTimeMillis();
-        while (Main.gameIsRunning) {
-            // Game logic
+        run = true;
     
-            long delta = System.currentTimeMillis() - time;
-            if (delta > msPerTick) {
+        long time = System.nanoTime();
+        while (run) {
+            // Game logic here
+            
+            long delta = System.nanoTime() - time;
+            if (delta < nsPerTick) {
                 try {
-                    Thread.sleep(delta);
+                    Thread.sleep((nsPerTick - delta) / 1000000, (int) (nsPerTick - delta) % 1000000);
                 } catch (InterruptedException e) {
                     break;
                 }
             }
+            time = System.nanoTime();
         }
+    }
+    
+    static void start(Scene scene, int xSize, int ySize, int zSize) {
+        new Thread(new GameLoop(scene, xSize, ySize, zSize)).start();
+    }
+    
+    static void stop() {
+        run = false;
     }
 }
