@@ -25,9 +25,6 @@ public class OrbitCamera extends Camera {
             .rotateAxis((float) Math.toRadians(this.y), 0.0f, 1.0f, 0.0f);
         
         this.orientation.set((float) Math.toRadians(-this.x), (float) Math.toRadians(-this.y), 0.0f);
-    
-        System.out.println("Orientation: (" + this.orientation.x + ", " + this.orientation.y + ", " + this.orientation.z + ")");
-        System.out.println("Position:    (" + this.position.x + ", " + this.position.y + ", " + this.position.z + ")");
         
         transform();
     }

@@ -1,13 +1,12 @@
 package net.brandontsang.tetroid.engine;
 
 import org.joml.Matrix4f;
-import org.lwjgl.system.MemoryStack;
+import org.lwjgl.BufferUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL15.*;
@@ -16,39 +15,42 @@ import static org.lwjgl.opengl.GL30.*;
 public class Mesh extends GameObject {
     private int vao;
     private int numVerts;
-    private int numIndices;
+    private int numTexCoords;
+    private int numVertNorms;
     
     private Matrix4f modelMatrix;
     
-    public Mesh(float[] vertices, int[] indices) {
-        this.numVerts   = vertices.length;
-        this.numIndices = indices.length;
-        
-        System.out.println(Arrays.toString(vertices));
-        System.out.println(Arrays.toString(indices));
+    public Mesh(float[] vertices, float[] texCoords, float[] vertNorms) {
+        this.numVerts     = vertices.length;
+        this.numTexCoords = texCoords.length;
+        this.numVertNorms = vertNorms.length;
         
         this.vao = glGenVertexArrays();
         glBindVertexArray(vao);
     
-        FloatBuffer vertexBuffer;
-        IntBuffer   indexBuffer;
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            vertexBuffer = stack.callocFloat(this.numVerts);
-            vertexBuffer.put(vertices).flip();
-            
-            indexBuffer = stack.callocInt(this.numIndices);
-            indexBuffer.put(indices).flip();
-        }
-    
+        FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(this.numVerts);
+        vertexBuffer.put(vertices).flip();
         int vertexVboId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vertexVboId);
         glBufferData(GL_ARRAY_BUFFER, vertexBuffer, GL_STATIC_DRAW);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);
         
-        int indexVboId = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVboId);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBuffer, GL_STATIC_DRAW);
+        FloatBuffer texCoordBuffer = BufferUtils.createFloatBuffer(this.numTexCoords);
+        texCoordBuffer.put(texCoords).flip();
+        int texCoordVboId = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, texCoordVboId);
+        glBufferData(GL_ARRAY_BUFFER, texCoordBuffer, GL_STATIC_DRAW);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(1);
+        
+        FloatBuffer vertNormBuffer = BufferUtils.createFloatBuffer(this.numVertNorms);
+        vertNormBuffer.put(vertNorms).flip();
+        int vertNormVboId = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, vertNormVboId);
+        glBufferData(GL_ARRAY_BUFFER, vertNormBuffer, GL_STATIC_DRAW);
+        glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(2);
     
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -96,17 +98,30 @@ public class Mesh extends GameObject {
             buf.readLine();
         }
         buf.close();
-    
+        
         // Parse OBJ files.
         buf = new BufferedReader(new FileReader(fileLocation));
+        
+        // OpenGL only supports one index per VAO. Since OBJs store three separate indices
+        // (one for each of vertices, texture coordinates, and vertex normals), it is
+        // necessary to re-index the texture coordinates and vertex normals. The following
+        // variables are indexed by the indices specified in the OBJ file. They will be
+        // organized later by their indices.
+        float[] verticesIndexed  = new float[numVerts * 3];
+        float[] texCoordsIndexed = new float[numTexCoords * 2];
+        float[] vertNormsIndexed = new float[numVertNorms * 3];
+        
+        float[] vertices  = new float[numFaces * 9];
+        float[] texCoords = new float[numFaces * 6];
+        float[] vertNorms = new float[numFaces * 9];
     
-        float[] vertices  = new float[numVerts * 3];
-        float[] texCoords = new float[numTexCoords];
-        float[] vertNorms = new float[numVertNorms];
-        int[]   faces     = new int[numFaces * 3];
-    
+        int currentIndexedVertex   = 0;
+        int currentIndexedTexCoord = 0;
+        int currentIndexedVertNorm = 0;
+        
         int currentVertex = 0;
-        int currentFace   = 0;
+        int currentTexCoord = 0;
+        int currentVertNorm = 0;
     
         while ((ch = (char) buf.read()) != 0xFFFF) {
             if (ch == '#') {
@@ -126,14 +141,48 @@ public class Mesh extends GameObject {
                             if (_vertex[i] == null) {
                                 _vertex[i] = new StringBuilder(Character.toString(ch));
                             } else if (ch == ' ') {
-                                vertices[currentVertex * 3 + i] = Float.parseFloat(_vertex[i].toString());
+                                verticesIndexed[currentIndexedVertex * 3 + i] = Float.parseFloat(_vertex[i].toString());
                                 i++;
                             } else {
                                 _vertex[i].append(ch);
                             }
                         }
-                        vertices[currentVertex * 3 + i] = Float.parseFloat(_vertex[i].toString());
-                        currentVertex++;
+                        verticesIndexed[currentIndexedVertex * 3 + i] = Float.parseFloat(_vertex[i].toString());
+                        currentIndexedVertex++;
+                        break;
+                    }
+                    case "vt": {
+                        StringBuilder[] _vt = new StringBuilder[3];
+                        int i = 0;
+                        while ((ch = (char) buf.read()) != '\n') {
+                            if (_vt[i] == null) {
+                                _vt[i] = new StringBuilder(Character.toString(ch));
+                            } else if (ch == ' ') {
+                                texCoordsIndexed[currentIndexedTexCoord * 2 + i] = Float.parseFloat(_vt[i].toString());
+                                i++;
+                            } else {
+                                _vt[i].append(ch);
+                            }
+                        }
+                        texCoordsIndexed[currentIndexedTexCoord * 2 + i] = Float.parseFloat(_vt[i].toString());
+                        currentIndexedTexCoord++;
+                        break;
+                    }
+                    case "vn": {
+                        StringBuilder[] _vn = new StringBuilder[3];
+                        int i = 0;
+                        while ((ch = (char) buf.read()) != '\n') {
+                            if (_vn[i] == null) {
+                                _vn[i] = new StringBuilder(Character.toString(ch));
+                            } else if (ch == ' ') {
+                                vertNormsIndexed[currentIndexedVertNorm * 3 + i] = Float.parseFloat(_vn[i].toString());
+                                i++;
+                            } else {
+                                _vn[i].append(ch);
+                            }
+                        }
+                        vertNormsIndexed[currentIndexedVertNorm * 3 + i] = Float.parseFloat(_vn[i].toString());
+                        currentIndexedVertNorm++;
                         break;
                     }
                     case "f": {
@@ -153,28 +202,45 @@ public class Mesh extends GameObject {
                          */
                         int j = 0;
                         
-                        while ((ch = (char) buf.read()) != '\n') {
-                            if (ch == '/' || ch == ' ') {
+                        while (true) {
+                            ch = (char) buf.read();
+                            
+                            if (ch == '/' || ch == ' ' || ch == '\n') {
                                 switch (j) {
-                                    case 0: {
-                                        faces[currentFace * 3 + i] = Integer.parseInt(_face[i * 3].toString()) - 1;
+                                    case 0: { // Vertex index
+                                        int vertexIndex = Integer.parseInt(_face[i * 3].toString()) - 1;
+                                        vertices[currentVertex] = verticesIndexed[vertexIndex * 3];
+                                        vertices[currentVertex + 1] = verticesIndexed[vertexIndex * 3 + 1];
+                                        vertices[currentVertex + 2] = verticesIndexed[vertexIndex * 3 + 2];
+                                        currentVertex += 3;
                                         j++;
                                         break;
                                     }
-                                    case 1: {
+                                    case 1: { // Texture coordinate index
+                                        int texCoordIndex = Integer.parseInt(_face[i * 3 + 1].toString()) - 1;
+                                        texCoords[currentTexCoord] = texCoordsIndexed[texCoordIndex * 2];
+                                        texCoords[currentTexCoord + 1] = texCoordsIndexed[texCoordIndex * 2 + 1];
+                                        currentTexCoord += 2;
                                         j++;
                                         break;
                                     }
-                                    case 2: {
+                                    case 2: { // Vertex normal index
+                                        int vertNormIndex = Integer.parseInt(_face[i * 3 + 2].toString()) - 1;
+                                        vertNorms[currentVertNorm] = vertNormsIndexed[vertNormIndex * 3];
+                                        vertNorms[currentVertNorm + 1] = vertNormsIndexed[vertNormIndex * 3 + 1];
+                                        vertNorms[currentVertNorm + 2] = vertNormsIndexed[vertNormIndex * 3 + 2];
+                                        currentVertNorm += 3;
                                         i++;
                                         j = 0;
+                                        break;
                                     }
                                 }
                             } else {
                                 _face[i * 3 + j].append(ch);
                             }
+                            
+                            if (ch == '\n') break;
                         }
-                        currentFace++;
                         break;
                     }
                     default: {
@@ -185,7 +251,7 @@ public class Mesh extends GameObject {
             }
         }
         
-        return new Mesh(vertices, faces);
+        return new Mesh(vertices, texCoords, vertNorms);
     }
     
     public int vao() {
@@ -194,10 +260,6 @@ public class Mesh extends GameObject {
     
     public int numVerts() {
         return this.numVerts;
-    }
-    
-    public int numIndices() {
-        return this.numIndices;
     }
     
     public Matrix4f modelMatrix() {

@@ -50,8 +50,8 @@ public class Main {
         glfwSetCursorPosCallback(window.pointer(), (long evWindow, double mouseX, double mouseY) -> {
             if (firstCall) {
                 firstCall = false;
-            } else {
-                camera.rotate((float) (mouseY - prevMouseY) / 10, (float) (mouseX - prevMouseX) / 10);
+            } else if (glfwGetMouseButton(window.pointer(), GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
+                camera.rotate((float) (mouseY - prevMouseY) / 5, (float) (mouseX - prevMouseX) / 5);
             }
             prevMouseX = mouseX;
             prevMouseY = mouseY;

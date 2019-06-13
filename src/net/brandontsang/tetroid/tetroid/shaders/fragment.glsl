@@ -1,7 +1,9 @@
 #version 400 core
 
+flat in vec3 vertNorm;
+
 out vec4 FragColor;
 
 void main() {
-    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+    FragColor = vec4(vertNorm, 1.0f);
 }
