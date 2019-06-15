@@ -7,23 +7,26 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class Mesh extends GameObject {
+public class Mesh {
     private int vao;
     private int numVerts;
     private int numTexCoords;
     private int numVertNorms;
     
-    private Matrix4f modelMatrix;
+    private Material material;
     
-    public Mesh(float[] vertices, float[] texCoords, float[] vertNorms) {
+    private Matrix4f modelMatrix = new Matrix4f();
+    
+    public Mesh(float[] vertices, float[] texCoords, float[] vertNorms, Material material) {
         this.numVerts     = vertices.length;
         this.numTexCoords = texCoords.length;
         this.numVertNorms = vertNorms.length;
+        
+        this.material = material;
         
         this.vao = glGenVertexArrays();
         glBindVertexArray(vao);
@@ -51,14 +54,23 @@ public class Mesh extends GameObject {
         glBufferData(GL_ARRAY_BUFFER, vertNormBuffer, GL_STATIC_DRAW);
         glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(2);
+        
+        FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(this.numVerts * 4);
+        // Fill `colorBuffer` with the same color.
+        for (int i = 0; i < this.numVerts * 4; i += 4) {
+            material.getColor().get(i, colorBuffer);
+        }
+        int colorVboId = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
+        glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
+        glVertexAttribPointer(3, 4, GL_FLOAT, false, 0, 0);
+        glEnableVertexAttribArray(3);
     
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        
-        this.modelMatrix = new Matrix4f();
     }
     
-    public static Mesh fromFile(String fileLocation) throws IOException {
+    public static Mesh fromFile(String fileLocation, Material material) throws IOException {
         BufferedReader buf = new BufferedReader(new FileReader(fileLocation));
     
         int numVerts     = 0;
@@ -251,7 +263,7 @@ public class Mesh extends GameObject {
             }
         }
         
-        return new Mesh(vertices, texCoords, vertNorms);
+        return new Mesh(vertices, texCoords, vertNorms, material);
     }
     
     public int vao() {
@@ -266,14 +278,23 @@ public class Mesh extends GameObject {
         return this.modelMatrix;
     }
     
-    // Angle in degrees.
-    public Matrix4f rotateY(float angle) {
-        this.modelMatrix.rotate((float) Math.toRadians(angle), 0, 1, 0);
-        return this.modelMatrix;
+    public Material material() {
+        return this.material;
     }
     
-    public Matrix4f translate(float dx, float dy, float dz) {
+    // Angle in degrees.
+    public Mesh rotateY(float angle) {
+        this.modelMatrix.rotate((float) Math.toRadians(angle), 0, 1, 0);
+        return this;
+    }
+    
+    public Mesh translate(float dx, float dy, float dz) {
         this.modelMatrix.translate(dx, dy, dz);
-        return this.modelMatrix;
+        return this;
+    }
+    
+    public Mesh scale(float factor) {
+        this.modelMatrix.scale(factor);
+        return this;
     }
 }

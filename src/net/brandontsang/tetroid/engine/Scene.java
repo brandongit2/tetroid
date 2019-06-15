@@ -1,14 +1,19 @@
 package net.brandontsang.tetroid.engine;
 
+import org.joml.Vector3f;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Scene {
     private ArrayList<Mesh>   meshes  = new ArrayList<>();
+    private ArrayList<Line>   lines   = new ArrayList<>();
     private ArrayList<Camera> cameras = new ArrayList<>();
     private ArrayList<Light>  lights  = new ArrayList<>();
     
     private Window        window;
     private ShaderProgram shaderProgram;
+    private Vector3f      ambientLight;
     
     private int currentCamera;
     
@@ -19,7 +24,17 @@ public class Scene {
     
     public int add(Mesh mesh) {
         this.meshes.add(mesh);
-        return this.meshes.size();
+        return this.meshes.size() - 1;
+    }
+    
+    public int add(Mesh[] meshes) {
+        this.meshes.addAll(Arrays.asList(meshes));
+        return this.meshes.size() - 1;
+    }
+    
+    public int add(Line line) {
+        this.lines.add(line);
+        return this.lines.size() - 1;
     }
     
     public int add(Camera camera) {
@@ -29,7 +44,7 @@ public class Scene {
     
     public int add(Light light) {
         this.lights.add(light);
-        return this.lights.size();
+        return this.lights.size() - 1;
     }
     
     public void setCurrentCamera(int i) {
@@ -48,6 +63,14 @@ public class Scene {
         this.shaderProgram = program;
     }
     
+    public void setAmbientLight(Vector3f color) {
+        this.ambientLight = color;
+    }
+    
+    public Vector3f getAmbientLight() {
+        return this.ambientLight;
+    }
+    
     public ShaderProgram getShaderProgram() {
         return this.shaderProgram;
     }
@@ -56,7 +79,15 @@ public class Scene {
         return this.meshes;
     }
     
-    public Mesh getMesh(int i) {
-        return this.meshes.get(i);
+    public ArrayList<Line> getLines() {
+        return this.lines;
+    }
+    
+    public ArrayList<Light> getLights() {
+        return this.lights;
+    }
+    
+    public Light getLight(int i) {
+        return this.lights.get(i);
     }
 }

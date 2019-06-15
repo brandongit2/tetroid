@@ -1,12 +1,15 @@
 package net.brandontsang.tetroid.tetroid;
 
 import net.brandontsang.tetroid.engine.*;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import java.io.IOException;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 public class Main {
     private Window window;
@@ -27,34 +30,60 @@ public class Main {
         scene = new Scene(window);
         
         program = new ShaderProgram();
+        glUseProgram(program.pointer());
         program.createUniform("projectionMatrix");
         program.createUniform("viewMatrix");
         program.createUniform("modelMatrix");
+        program.createUniform("matId");
+        program.createUniform("ambient");
+        program.createUniform("cameraPos");
+        program.createUniform("reflectivity");
+        program.createUniform("shininess");
+        for (int i = 0; i < 10; i++) {
+            program.createUniform("lightColor[" + i + "]");
+            program.createUniform("lightPos[" + i + "]");
+        }
         scene.setShaderProgram(program);
         
-        Mesh mesh;
+        scene.add(new Line(new Vector3f(-10.0f, 15.0f, -10.0f), new Vector3f(10.0f, 15.0f, 10.0f), new Vector4f(1.0f, 0.0f, 0.0f, 1.0f)));
         try {
-            mesh = Mesh.fromFile("./res/models/monkey.obj");
-            scene.add(mesh);
+            scene.add(new Mesh[] {
+                Mesh.fromFile("./res/models/monkey.obj", new PhongMaterial(new Vector3f(1.0f, 1.0f, 1.0f), 0.8f, 50.0f)),
+                Mesh.fromFile("./res/models/cube.obj", new PhongMaterial(new Vector3f(1.0f, 0.0f, 0.0f), 0.8f, 5.0f)).translate(5.0f, 0.0f, 0.0f),
+                Mesh.fromFile("./res/models/cube.obj", new PhongMaterial(new Vector3f(0.0f, 1.0f, 0.0f), 0.8f, 5.0f)).translate(0.0f, 5.0f, 0.0f),
+                Mesh.fromFile("./res/models/cube.obj", new PhongMaterial(new Vector3f(0.0f, 0.0f, 1.0f), 0.8f, 5.0f)).translate(0.0f, 0.0f, 5.0f),
+                Mesh.fromFile("./res/models/cube.obj", new PhongMaterial(new Vector3f(1.0f, 1.0f, 0.0f), 0.8f, 5.0f)).translate(-5.0f, 0.0f, 0.0f),
+                Mesh.fromFile("./res/models/cube.obj", new PhongMaterial(new Vector3f(0.0f, 1.0f, 1.0f), 0.8f, 5.0f)).translate(0.0f, -5.0f, 0.0f),
+                Mesh.fromFile("./res/models/cube.obj", new PhongMaterial(new Vector3f(1.0f, 0.0f, 1.0f), 0.8f, 5.0f)).translate(0.0f, 0.0f, -5.0f),
+                Mesh.fromFile("./res/models/plane.obj", new PhongMaterial(new Vector3f(1.0f, 1.0f, 1.0f), 1.0f, 100.0f)).translate(0.0f, -6.0f, 0.0f)
+            });
         } catch (IOException err) {
             err.printStackTrace();
             System.exit(1);
         }
         
-        OrbitCamera camera = new OrbitCamera(0.0f, 0.0f, 0.0f, 5.0f, 70.0f, 0.1f, 100f, window);
+        scene.setAmbientLight(new Vector3f(0.1f, 0.1f, 0.1f));
+        scene.add(new PointLight(new Vector3f(2.0f, 2.0f, 2.0f), new Vector3f(10.0f, 7.0f, 0.0f)));
+        scene.add(new PointLight(new Vector3f(2.0f, 0.3f, 2.0f), new Vector3f(-10.0f, 7.0f, 5.0f)));
         
+//        SunLight sunLight = new SunLight(-1.0f, 1.0f, -1.0f);
+//        scene.add(sunLight);
+        
+        OrbitCamera camera = new OrbitCamera(0.0f, 0.0f, 0.0f, 5.0f, 70.0f, 0.1f, 1000f, window);
         int camId = scene.add(camera);
         scene.setCurrentCamera(camId);
-    
-        glfwSetInputMode(window.pointer(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        
         glfwSetCursorPosCallback(window.pointer(), (long evWindow, double mouseX, double mouseY) -> {
             if (firstCall) {
                 firstCall = false;
             } else if (glfwGetMouseButton(window.pointer(), GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
-                camera.rotate((float) (mouseY - prevMouseY) / 5, (float) (mouseX - prevMouseX) / 5);
+                camera.rotate((float) (mouseY - prevMouseY) / -5, (float) (mouseX - prevMouseX) / -5);
             }
             prevMouseX = mouseX;
             prevMouseY = mouseY;
+        });
+        glfwSetScrollCallback(window.pointer(), (long window, double xoffset, double yoffset) -> {
+            camera.zoom((float) -yoffset);
         });
         
         GameLoop.start(scene, 10, 10, 15);

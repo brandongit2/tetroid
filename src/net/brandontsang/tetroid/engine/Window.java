@@ -6,12 +6,15 @@ import org.lwjgl.opengl.GL;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-    private long window;
-    private int width;
-    private int height;
+    private long  window;
+    private int   width;
+    private int   height;
+    private float xscale;
+    private float yscale;
     
     public Window(int width, int height, String title) {
         this.width = width;
@@ -22,7 +25,7 @@ public class Window {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-        glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
     
         // Create the window.
         window = glfwCreateWindow(width, height, "Hello", NULL, NULL);
@@ -46,6 +49,9 @@ public class Window {
         float[] xscale = new float[1];
         float[] yscale = new float[1];
         glfwGetMonitorContentScale(monitor, xscale, yscale);
+        this.xscale = xscale[0];
+        this.yscale = yscale[0];
+        
         GLFWVidMode vidMode      = glfwGetVideoMode(monitor);
         float       screenWidth  = vidMode.width();
         float       screenHeight = vidMode.height();
@@ -54,10 +60,11 @@ public class Window {
         int xpos = (int) (screenWidth - width * xscale[0]) / 2;
         int ypos = (int) (screenHeight- height * yscale[0]) / 2;
         glfwSetWindowPos(window, xpos, ypos);
-    
-        // Enable depth testing.
+        
+        glLineWidth(this.xscale);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
+        glEnable(GL_MULTISAMPLE);
     }
     
     public long pointer() {
@@ -70,5 +77,9 @@ public class Window {
     
     public int height() {
         return this.height;
+    }
+    
+    public float[] dpiScale() {
+        return new float[] {this.xscale, this.yscale};
     }
 }
