@@ -1,5 +1,6 @@
 package net.brandontsang.tetroid.engine;
 
+import net.brandontsang.tetroid.engine.lights.Light;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;

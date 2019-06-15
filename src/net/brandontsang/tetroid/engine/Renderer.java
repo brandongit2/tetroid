@@ -1,5 +1,6 @@
 package net.brandontsang.tetroid.engine;
 
+import net.brandontsang.tetroid.engine.lights.Light;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class Renderer {
         }
         
         ArrayList<Light> lights = scene.getLights();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             if (i < lights.size()) {
                 scene.getShaderProgram().setUniform("lightColor[" + i + "]", lights.get(i).getColor());
                 scene.getShaderProgram().setUniform("lightPos[" + i + "]", lights.get(i).getPosition());

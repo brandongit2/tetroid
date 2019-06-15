@@ -4,7 +4,7 @@ import net.brandontsang.tetroid.engine.Scene;
 import org.joml.Vector3f;
 
 class GameLoop implements Runnable {
-    private static final long    nsPerTick = 1000000000 / 60;
+    private static final long    nsPerTick = 1000000000 / 30;
     private static       boolean run       = false;
     private              int     tick      = 0;
     
@@ -22,7 +22,7 @@ class GameLoop implements Runnable {
     
         long time = System.nanoTime();
         while (run) {
-            double t = Math.toRadians(tick);
+            double t = Math.toRadians(tick) * 2;
             scene.getLight(1).setPosition(new Vector3f((float) Math.cos(t) * 10.0f, 7.0f, (float) Math.sin(t) * 10.0f));
             
             long delta = System.nanoTime() - time;

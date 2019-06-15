@@ -1,5 +1,6 @@
 package net.brandontsang.tetroid.engine;
 
+import net.brandontsang.tetroid.engine.materials.Material;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 

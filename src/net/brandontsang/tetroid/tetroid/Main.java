@@ -1,6 +1,8 @@
 package net.brandontsang.tetroid.tetroid;
 
 import net.brandontsang.tetroid.engine.*;
+import net.brandontsang.tetroid.engine.lights.PointLight;
+import net.brandontsang.tetroid.engine.materials.PhongMaterial;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -39,7 +41,7 @@ public class Main {
         program.createUniform("cameraPos");
         program.createUniform("reflectivity");
         program.createUniform("shininess");
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             program.createUniform("lightColor[" + i + "]");
             program.createUniform("lightPos[" + i + "]");
         }
@@ -100,7 +102,7 @@ public class Main {
         // Initialize GLFW.
         if (!glfwInit()) throw new IllegalStateException("Unable to initialize GLFW");
         
-        window = new Window(1280, 720, "Hello");
+        window = new Window(1280, 720, "Tetroid");
         
         glfwSetKeyCallback(window.pointer(), (long window, int key, int scancode, int action, int mods) -> {
             if (action == GLFW_RELEASE) {

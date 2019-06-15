@@ -28,7 +28,7 @@ public class Window {
         glfwWindowHint(GLFW_SAMPLES, 4);
     
         // Create the window.
-        window = glfwCreateWindow(width, height, "Hello", NULL, NULL);
+        window = glfwCreateWindow(width, height, title, NULL, NULL);
         if (window == NULL) throw new RuntimeException("Failed to create the GLFW window");
     
         // Create the OpenGL context.

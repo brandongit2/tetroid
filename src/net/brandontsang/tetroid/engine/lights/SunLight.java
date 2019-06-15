@@ -1,4 +1,4 @@
-package net.brandontsang.tetroid.engine;
+package net.brandontsang.tetroid.engine.lights;
 
 import org.joml.Vector3f;
 

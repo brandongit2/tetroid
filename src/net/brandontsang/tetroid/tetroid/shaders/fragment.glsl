@@ -1,6 +1,6 @@
 #version 400 core
 
-const int MAX_LIGHTS = 10;
+const int MAX_LIGHTS = 3;
 
 in vec3 fragPos; // The position on the mesh represented by the current fragment.
 in vec3 u_normal;
