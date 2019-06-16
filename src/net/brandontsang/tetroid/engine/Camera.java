@@ -14,7 +14,7 @@ public class Camera {
     public Camera(float x, float y, float z, float fov, float zNear, float zFar, Window window) {
         this.position.set(x, y, z);
         this.fov = fov;
-        this.projectionMatrix.perspective(fov, ((float) window.width()) / window.height(), zNear, zFar);
+        this.projectionMatrix.perspective((float) Math.toRadians(fov), ((float) window.width()) / window.height(), zNear, zFar);
         
         transform();
     }
@@ -47,8 +47,12 @@ public class Camera {
         return this.fov;
     }
     
-    public Vector3f position() {
+    public Vector3f getPosition() {
         return this.position;
+    }
+    
+    public Vector3f getOrientation() {
+        return this.orientation;
     }
     
     public Matrix4f projectionMatrix() {

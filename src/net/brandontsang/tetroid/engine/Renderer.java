@@ -18,24 +18,26 @@ public class Renderer {
         glUseProgram(scene.getShaderProgram().pointer());
         
         scene.getShaderProgram().setUniform("ambient", scene.getAmbientLight());
-        scene.getShaderProgram().setUniform("cameraPos", scene.getCurrentCamera().position());
+        scene.getShaderProgram().setUniform("cameraPos", scene.getCurrentCamera().getPosition());
     
         scene.getShaderProgram().setUniform("projectionMatrix", scene.getCurrentCamera().projectionMatrix());
         scene.getShaderProgram().setUniform("viewMatrix", scene.getCurrentCamera().viewMatrix());
         
         for (Mesh mesh : scene.getMeshes()) {
-            scene.getShaderProgram().setUniform("modelMatrix", mesh.modelMatrix());
-            scene.getShaderProgram().setUniform("matId", mesh.material().matId());
-            scene.getShaderProgram().setUniform("reflectivity", mesh.material().getReflectivity());
-            scene.getShaderProgram().setUniform("shininess", mesh.material().getShininess());
+            scene.getShaderProgram().setUniform("modelMatrix", mesh.getModelMatrix());
+            scene.getShaderProgram().setUniform("matId", mesh.getMaterial().matId());
+            scene.getShaderProgram().setUniform("opacity", mesh.getMaterial().getOpacity());
+            scene.getShaderProgram().setUniform("reflectivity", mesh.getMaterial().getReflectivity());
+            scene.getShaderProgram().setUniform("shininess", mesh.getMaterial().getShininess());
             
-            glBindVertexArray(mesh.vao());
+            glBindVertexArray(mesh.getVao());
             glDrawArrays(GL_TRIANGLES, 0, mesh.numVerts());
         }
         
         for (Line line : scene.getLines()) {
             scene.getShaderProgram().setUniform("modelMatrix", line.getModelMatrix());
             scene.getShaderProgram().setUniform("matId", 0);
+            scene.getShaderProgram().setUniform("opacity", line.getOpacity());
     
             glBindVertexArray(line.getVao());
             glDrawArrays(GL_LINES, 0, 2);
@@ -44,10 +46,16 @@ public class Renderer {
         ArrayList<Light> lights = scene.getLights();
         for (int i = 0; i < 3; i++) {
             if (i < lights.size()) {
-                scene.getShaderProgram().setUniform("lightColor[" + i + "]", lights.get(i).getColor());
-                scene.getShaderProgram().setUniform("lightPos[" + i + "]", lights.get(i).getPosition());
+                Light light = lights.get(i);
+                scene.getShaderProgram().setUniform("lightType[" + i + "]", light.lightType());
+                scene.getShaderProgram().setUniform("lightColor[" + i + "]", light.getColor());
+                scene.getShaderProgram().setUniform("lightPos[" + i + "]", light.getPosition());
+                scene.getShaderProgram().setUniform("lightDir[" + i + "]", light.getDirection());
             } else {
+                scene.getShaderProgram().setUniform("lightType[" + i + "]", 0);
                 scene.getShaderProgram().setUniform("lightColor[" + i + "]", new Vector3f(0.0f, 0.0f, 0.0f));
+                scene.getShaderProgram().setUniform("lightPos[" + i + "]", new Vector3f(0.0f, 0.0f, 0.0f));
+                scene.getShaderProgram().setUniform("lightDir[" + i + "]", new Vector3f(0.0f, -1.0f, 0.0f));
             }
         }
         

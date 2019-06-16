@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 
 public class PhongMaterial implements Material {
     private Vector3f color;
+    private float opacity = 1.0f;
     private float reflectivity;
     private float shininess;
     
@@ -15,6 +16,14 @@ public class PhongMaterial implements Material {
     
     public Vector3f getColor() {
         return this.color;
+    }
+    
+    public void setOpacity(float opacity) {
+        this.opacity = opacity;
+    }
+    
+    public float getOpacity() {
+        return this.opacity;
     }
     
     public float getReflectivity() {

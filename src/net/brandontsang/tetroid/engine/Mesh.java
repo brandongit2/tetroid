@@ -18,6 +18,7 @@ public class Mesh {
     private int numTexCoords;
     private int numVertNorms;
     
+    public boolean isInScene = false;
     private Material material;
     
     private Matrix4f modelMatrix = new Matrix4f();
@@ -56,15 +57,15 @@ public class Mesh {
         glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(2);
         
-        FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(this.numVerts * 4);
+        FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(this.numVerts * 3);
         // Fill `colorBuffer` with the same color.
-        for (int i = 0; i < this.numVerts * 4; i += 4) {
+        for (int i = 0; i < this.numVerts * 3; i += 3) {
             material.getColor().get(i, colorBuffer);
         }
         int colorVboId = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
         glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
-        glVertexAttribPointer(3, 4, GL_FLOAT, false, 0, 0);
+        glVertexAttribPointer(3, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(3);
     
         glBindVertexArray(0);
@@ -267,7 +268,7 @@ public class Mesh {
         return new Mesh(vertices, texCoords, vertNorms, material);
     }
     
-    public int vao() {
+    public int getVao() {
         return this.vao;
     }
     
@@ -275,12 +276,16 @@ public class Mesh {
         return this.numVerts;
     }
     
-    public Matrix4f modelMatrix() {
+    public Matrix4f getModelMatrix() {
         return this.modelMatrix;
     }
     
-    public Material material() {
+    public Material getMaterial() {
         return this.material;
+    }
+    
+    public void setMaterial(Material material) {
+        this.material = material;
     }
     
     // Angle in degrees.
@@ -296,6 +301,11 @@ public class Mesh {
     
     public Mesh scale(float factor) {
         this.modelMatrix.scale(factor);
+        return this;
+    }
+    
+    public Mesh setTranslation(float x, float y, float z) {
+        this.modelMatrix.setTranslation(x, y, z);
         return this;
     }
 }

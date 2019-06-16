@@ -12,7 +12,7 @@ public class OrbitCamera extends Camera {
     
     public OrbitCamera(float cx, float cy, float cz, float radius, float fov, float zNear, float zFar, Window window) {
         // Camera begins at (0, 0, radius) relative to the center.
-        super(cx, cy, cz - radius, fov, zNear, zFar, window);
+        super(-cx, -cy, -cz - radius, fov, zNear, zFar, window);
         
         this.center = new Vector3f(cx, cy, cz);
         this.radius = radius;
@@ -27,11 +27,12 @@ public class OrbitCamera extends Camera {
         if (this.x < -90.1f) this.x = -90.0f;
         
         this.position
-            .set(0.0f, 0.0f, -5)
+            .set(0.0f, 0.0f, -radius)
             .rotateAxis((float) Math.toRadians(this.x), 1.0f, 0.0f, 0.0f)
             .rotateAxis((float) Math.toRadians(this.y), 0.0f, 1.0f, 0.0f)
             .mul(this.zoom)
-            .add(this.center);
+            .sub(this.center)
+            .add(new Vector3f(0.0f, this.x / 10.0f, 0.0f));
         
         this.orientation.set((float) Math.toRadians(this.x), (float) Math.toRadians(this.y), 0.0f).mul(-1);
         
@@ -39,14 +40,16 @@ public class OrbitCamera extends Camera {
     }
     
     public void zoom(float factor) {
-        float nextZoom = (float) Math.pow(2.0, Math.log(this.zoom) / Math.log(2.0)) + factor / 5;
-        this.zoom = nextZoom < 0.01f ? 0.01f : nextZoom;
-        
+        float nextZoom = (float) Math.pow(2.0, Math.log(this.zoom) / Math.log(2.0)) + factor;
+        this.zoom = nextZoom < 2.0f ? 2.0f : nextZoom;
+    
         this.position
+            .set(0.0f, 0.0f, -radius)
+            .rotateAxis((float) Math.toRadians(this.x), 1.0f, 0.0f, 0.0f)
+            .rotateAxis((float) Math.toRadians(this.y), 0.0f, 1.0f, 0.0f)
+            .mul(this.zoom)
             .sub(this.center)
-            .normalize()
-            .mul(this.radius * this.zoom)
-            .add(this.center);
+            .add(new Vector3f(0.0f, this.x / 10.0f, 0.0f));
         
         transform();
     }

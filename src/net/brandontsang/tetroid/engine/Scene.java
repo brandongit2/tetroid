@@ -25,16 +25,25 @@ public class Scene {
     
     public int add(Mesh mesh) {
         this.meshes.add(mesh);
+        mesh.isInScene = true;
         return this.meshes.size() - 1;
     }
     
     public int add(Mesh[] meshes) {
         this.meshes.addAll(Arrays.asList(meshes));
+        for (Mesh mesh : meshes) {
+            mesh.isInScene = true;
+        }
         return this.meshes.size() - 1;
     }
     
     public int add(Line line) {
         this.lines.add(line);
+        return this.lines.size() - 1;
+    }
+    
+    public int add(Line[] lines) {
+        this.lines.addAll(Arrays.asList(lines));
         return this.lines.size() - 1;
     }
     
@@ -82,6 +91,10 @@ public class Scene {
     
     public ArrayList<Line> getLines() {
         return this.lines;
+    }
+    
+    public Line getLine(int i) {
+        return this.lines.get(i);
     }
     
     public ArrayList<Light> getLights() {

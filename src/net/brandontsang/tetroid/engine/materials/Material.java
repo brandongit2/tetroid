@@ -3,8 +3,9 @@ package net.brandontsang.tetroid.engine.materials;
 import org.joml.Vector3f;
 
 public interface Material {
-    public Vector3f getColor();
-    public int matId();
+    Vector3f getColor();
+    float getOpacity();
+    int matId();
     
     default float getReflectivity() {
         return 1.0f;
