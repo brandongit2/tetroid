@@ -18,7 +18,7 @@ class RenderLoop {
         while (run) {
             if (glfwWindowShouldClose(scene.window().pointer())) run = false;
     
-            if (tick % 1 == 0) {
+            if (tick % 30 == 0) {
                 if (GameGrid.existsActiveTetromino) {
                     GameGrid.translate(new Vector3i(0, -1, 0));
                 } else {

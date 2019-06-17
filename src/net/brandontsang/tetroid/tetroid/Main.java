@@ -4,6 +4,7 @@ import net.brandontsang.tetroid.engine.*;
 import net.brandontsang.tetroid.engine.lights.SunLight;
 import net.brandontsang.tetroid.engine.materials.PhongMaterial;
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import java.io.IOException;
@@ -29,6 +30,11 @@ public class Main {
     static final int GRID_WIDTH = 10;
     static final int GRID_HEIGHT = 20;
     
+    private int[] posXWall = new int[GRID_LENGTH + GRID_HEIGHT + 2];
+    private int[] negXWall = new int[GRID_LENGTH + GRID_HEIGHT + 2];
+    private int[] posZWall = new int[GRID_WIDTH + GRID_HEIGHT + 2];
+    private int[] negZWall = new int[GRID_WIDTH + GRID_HEIGHT + 2];
+    
     private void run() {
         init();
         
@@ -53,39 +59,7 @@ public class Main {
         }
         scene.setShaderProgram(program);
         
-        // Draw grid
-        int[] posXWall = new int[GRID_LENGTH + GRID_HEIGHT + 2];
-        int[] negXWall = new int[GRID_LENGTH + GRID_HEIGHT + 2];
-        int[] posZWall = new int[GRID_WIDTH + GRID_HEIGHT + 2];
-        int[] negZWall = new int[GRID_WIDTH + GRID_HEIGHT + 2];
-        int posXCounter = 0;
-        int negXCounter = 0;
-        int posZCounter = 0;
-        int negZCounter = 0;
-        for (int i = 0; i <= GRID_WIDTH; i++) {
-            scene.add(new Line(new Vector3f(i, 0.0f, 0.0f), new Vector3f(i, 0.0f, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
-            negZWall[negZCounter] = scene.add(new Line(new Vector3f(i, 0.0f, 0.0f), new Vector3f(i, GRID_HEIGHT, 0.0f), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
-            negZCounter++;
-            posZWall[posZCounter] = scene.add(new Line(new Vector3f(i, 0.0f, GRID_LENGTH), new Vector3f(i, GRID_HEIGHT, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
-            posZCounter++;
-        }
-        for (int i = 0; i <= GRID_LENGTH; i++) {
-            scene.add(new Line(new Vector3f(0.0f, 0.0f, i), new Vector3f(GRID_WIDTH, 0.0f, i), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
-            negXWall[negXCounter] = scene.add(new Line(new Vector3f(0.0f, 0.0f, i), new Vector3f(0.0f, GRID_HEIGHT, i), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
-            negXCounter++;
-            posXWall[posXCounter] = scene.add(new Line(new Vector3f(GRID_WIDTH, 0.0f, i), new Vector3f(GRID_WIDTH, GRID_HEIGHT, i), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
-            posXCounter++;
-        }
-        for (int i = 0; i <= GRID_HEIGHT; i++) {
-            negXWall[negXCounter] = scene.add(new Line(new Vector3f(0.0f, i, 0.0f), new Vector3f(0.0f, i, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
-            negXCounter++;
-            posXWall[posXCounter] = scene.add(new Line(new Vector3f(GRID_WIDTH, i, 0.0f), new Vector3f(GRID_WIDTH, i, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
-            posXCounter++;
-            negZWall[negZCounter] = scene.add(new Line(new Vector3f(0.0f, i, 0.0f), new Vector3f(GRID_WIDTH, i, 0.0f), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
-            negZCounter++;
-            posZWall[posZCounter] = scene.add(new Line(new Vector3f(0.0f, i, GRID_LENGTH), new Vector3f(GRID_WIDTH, i, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
-            posZCounter++;
-        }
+        drawWalls();
         
         try {
             scene.add(Mesh.fromFile("./res/models/plane.obj", new PhongMaterial(new Vector3f(0.1f, 0.1f, 0.1f), 0.5f, 10.0f)).translate(0.0f, -0.01f, 0.0f));
@@ -103,12 +77,87 @@ public class Main {
         int camId = scene.add(camera);
         scene.setCurrentCamera(camId);
         
+        glfwSetKeyCallback(window.pointer(), (long window, int key, int scancode, int action, int mods) -> {
+            if (action == GLFW_PRESS) {
+                int forward   = 0;
+                int rightward = 0;
+                int upward    = 0;
+                
+                int rotForward   = 0;
+                int rotRightward = 0;
+                int rotClockwise = 0;
+    
+                switch (key) {
+                    case GLFW_KEY_ESCAPE:
+                        terminate();
+                        break;
+                    case GLFW_KEY_SPACE:
+                        upward = -1;
+                        break;
+                    case GLFW_KEY_UP:
+                        forward++;
+                        break;
+                    case GLFW_KEY_RIGHT:
+                        rightward++;
+                        break;
+                    case GLFW_KEY_DOWN:
+                        forward = -1;
+                        break;
+                    case GLFW_KEY_LEFT:
+                        rightward = -1;
+                        break;
+                    case GLFW_KEY_W:
+                        rotForward++;
+                        break;
+                    case GLFW_KEY_D:
+                        rotRightward = 1;
+                        break;
+                    case GLFW_KEY_S:
+                        rotForward = 3;
+                        break;
+                    case GLFW_KEY_A:
+                        rotRightward = 3;
+                        break;
+                    case GLFW_KEY_Q:
+                        rotClockwise = 1;
+                        break;
+                    case GLFW_KEY_E:
+                        rotClockwise = 3;
+                        break;
+                }
+    
+                float rot = camera.getOrientation().y;
+                rot -= Math.PI / 4;
+                if (Math.cos(rot) > 0 && Math.sin(rot) >= 0) {
+                    GameGrid.translate(new Vector3i(forward, upward, rightward));
+                    GameGrid.rotate(0, 4 - rotRightward);
+                    GameGrid.rotate(1, 4 - rotClockwise);
+                    GameGrid.rotate(2, 4 - rotForward);
+                } else if (Math.cos(rot) <= 0.0 && Math.sin(rot) > 0.0) {
+                    GameGrid.translate(new Vector3i(-rightward, upward, forward));
+                    GameGrid.rotate(0, 4 - rotForward);
+                    GameGrid.rotate(1, 4 - rotClockwise);
+                    GameGrid.rotate(2, rotRightward);
+                } else if (Math.cos(rot) < 0.0 && Math.sin(rot) <= 0.0) {
+                    GameGrid.translate(new Vector3i(-forward, upward, -rightward));
+                    GameGrid.rotate(0, rotRightward);
+                    GameGrid.rotate(1, 4 - rotClockwise);
+                    GameGrid.rotate(2, rotForward);
+                } else if (Math.cos(rot) >= 0.0 && Math.sin(rot) < 0.0) {
+                    GameGrid.translate(new Vector3i(rightward, upward, -forward));
+                    GameGrid.rotate(0, rotForward);
+                    GameGrid.rotate(1, 4 - rotClockwise);
+                    GameGrid.rotate(2, 4 - rotRightward);
+                }
+            }
+        });
         glfwSetCursorPosCallback(window.pointer(), (long evWindow, double mouseX, double mouseY) -> {
             if (firstCall) {
                 firstCall = false;
             } else if (glfwGetMouseButton(window.pointer(), GLFW_MOUSE_BUTTON_1) == GLFW_PRESS) {
                 camera.rotate((float) (mouseY - prevMouseY) / -5, (float) (mouseX - prevMouseX) / -5);
                 
+                // Set near walls transparent
                 float rot = camera.getOrientation().y;
                 if (Math.cos(rot) > 0.0 && Math.sin(rot) >= 0.0) {
                     for (int i : posXWall) {
@@ -211,5 +260,36 @@ public class Main {
     
     public static void main(String[] args) {
         new Main().run();
+    }
+    
+    private void drawWalls() {
+        int posXCounter = 0;
+        int negXCounter = 0;
+        int posZCounter = 0;
+        int negZCounter = 0;
+        for (int i = 0; i <= GRID_WIDTH; i++) {
+            scene.add(new Line(new Vector3f(i, 0.0f, 0.0f), new Vector3f(i, 0.0f, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
+            negZWall[negZCounter] = scene.add(new Line(new Vector3f(i, 0.0f, 0.0f), new Vector3f(i, GRID_HEIGHT, 0.0f), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
+            negZCounter++;
+            posZWall[posZCounter] = scene.add(new Line(new Vector3f(i, 0.0f, GRID_LENGTH), new Vector3f(i, GRID_HEIGHT, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
+            posZCounter++;
+        }
+        for (int i = 0; i <= GRID_LENGTH; i++) {
+            scene.add(new Line(new Vector3f(0.0f, 0.0f, i), new Vector3f(GRID_WIDTH, 0.0f, i), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
+            negXWall[negXCounter] = scene.add(new Line(new Vector3f(0.0f, 0.0f, i), new Vector3f(0.0f, GRID_HEIGHT, i), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
+            negXCounter++;
+            posXWall[posXCounter] = scene.add(new Line(new Vector3f(GRID_WIDTH, 0.0f, i), new Vector3f(GRID_WIDTH, GRID_HEIGHT, i), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
+            posXCounter++;
+        }
+        for (int i = 0; i <= GRID_HEIGHT; i++) {
+            negXWall[negXCounter] = scene.add(new Line(new Vector3f(0.0f, i, 0.0f), new Vector3f(0.0f, i, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
+            negXCounter++;
+            posXWall[posXCounter] = scene.add(new Line(new Vector3f(GRID_WIDTH, i, 0.0f), new Vector3f(GRID_WIDTH, i, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
+            posXCounter++;
+            negZWall[negZCounter] = scene.add(new Line(new Vector3f(0.0f, i, 0.0f), new Vector3f(GRID_WIDTH, i, 0.0f), new Vector3f(1.0f, 1.0f, 1.0f), 0.5f));
+            negZCounter++;
+            posZWall[posZCounter] = scene.add(new Line(new Vector3f(0.0f, i, GRID_LENGTH), new Vector3f(GRID_WIDTH, i, GRID_LENGTH), new Vector3f(1.0f, 1.0f, 1.0f), 0.1f));
+            posZCounter++;
+        }
     }
 }

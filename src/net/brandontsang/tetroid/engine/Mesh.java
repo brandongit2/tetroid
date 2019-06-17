@@ -289,8 +289,10 @@ public class Mesh {
     }
     
     // Angle in degrees.
-    public Mesh rotateY(float angle) {
-        this.modelMatrix.rotate((float) Math.toRadians(angle), 0, 1, 0);
+    public Mesh rotate(float rx, float ry, float rz) {
+        this.modelMatrix.rotate((float) Math.toRadians(rz), 0, 0, 1);
+        this.modelMatrix.rotate((float) Math.toRadians(rx), 1, 0, 0);
+        this.modelMatrix.rotate((float) Math.toRadians(ry), 0, 1, 0);
         return this;
     }
     
