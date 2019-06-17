@@ -3,13 +3,17 @@
 const int MAX_LIGHTS = 3;
 
 in vec3 fragPos; // The position on the mesh represented by the current fragment.
+in vec2 texCoord;
 in vec3 u_normal;
 in vec3 vertColor;
 
 layout (location = 0) out vec4 fragColor;
 
+uniform sampler2D tex;
+
 uniform mat4  modelMatrix;
 uniform int   matId;
+uniform int   isTextured;
 uniform float opacity;
 uniform vec3  ambient;
 uniform vec3  cameraPos;
@@ -34,7 +38,12 @@ uniform float shininess;
 void main() {
     switch (matId) {
         case 0: {
-            fragColor = vec4(vertColor, opacity);
+            if (isTextured == 0) {
+                fragColor = vec4(vertColor, opacity);
+            } else {
+                vec4 textured = texture(tex, texCoord);
+                fragColor = vec4(textured.xyz, textured.w * opacity);
+            }
             break;
         }
         case 1: {
@@ -67,7 +76,13 @@ void main() {
                 totalSpecular += val * reflectivity * lightColor[i] * attenuation;
             }
 
-            fragColor = vec4((totalDiffuse + ambient) * vertColor + totalSpecular, opacity);
+            if (isTextured == 0) {
+                fragColor = vec4((totalDiffuse + ambient) * vertColor + totalSpecular, opacity);
+
+            } else {
+                vec4 textured = texture(tex, texCoord);
+                fragColor = vec4((totalDiffuse + ambient) * textured.xyz + totalSpecular, textured.w * opacity);
+            }
             break;
         }
     }

@@ -13,8 +13,7 @@ class GameGrid {
     
     static void addTetromino() {
         existsActiveTetromino = true;
-//        int tetromino = (int) (Math.random() * 8);
-        int tetromino = 5;
+        int tetromino = (int) (Math.random() * 8);
         switch (tetromino) {
             case 0:
                 blocks.add(new Block(tetromino, new Vector3i(4, 17, 4)));

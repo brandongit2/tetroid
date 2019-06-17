@@ -18,7 +18,9 @@ public class Mesh {
     private int numTexCoords;
     private int numVertNorms;
     
-    public boolean isInScene = false;
+    public boolean isInScene  = false;
+    public boolean isTextured = false;
+    private Texture texture;
     private Material material;
     
     private Matrix4f modelMatrix = new Matrix4f();
@@ -178,7 +180,7 @@ public class Mesh {
                                 _vt[i].append(ch);
                             }
                         }
-                        texCoordsIndexed[currentIndexedTexCoord * 2 + i] = Float.parseFloat(_vt[i].toString());
+                        texCoordsIndexed[currentIndexedTexCoord * 2 + i] = -Float.parseFloat(_vt[i].toString());
                         currentIndexedTexCoord++;
                         break;
                     }
@@ -268,6 +270,11 @@ public class Mesh {
         return new Mesh(vertices, texCoords, vertNorms, material);
     }
     
+    public void applyTexture(Texture texture) {
+        this.isTextured = true;
+        this.texture = texture;
+    }
+    
     public int getVao() {
         return this.vao;
     }
@@ -282,6 +289,10 @@ public class Mesh {
     
     public Material getMaterial() {
         return this.material;
+    }
+    
+    public int getTextureLoc() {
+        return this.texture.getLoc();
     }
     
     public void setMaterial(Material material) {

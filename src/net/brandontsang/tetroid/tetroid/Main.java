@@ -46,6 +46,7 @@ public class Main {
         program.createUniform("viewMatrix");
         program.createUniform("modelMatrix");
         program.createUniform("matId");
+        program.createUniform("isTextured");
         program.createUniform("opacity");
         program.createUniform("ambient");
         program.createUniform("cameraPos");
@@ -63,6 +64,9 @@ public class Main {
         
         try {
             scene.add(Mesh.fromFile("./res/models/plane.obj", new PhongMaterial(new Vector3f(0.1f, 0.1f, 0.1f), 0.5f, 10.0f)).translate(0.0f, -0.01f, 0.0f));
+            Mesh earth = Mesh.fromFile("./res/models/earth.obj", new PhongMaterial(new Vector3f(1.0f, 1.0f, 1.0f), 0.8f, 1000.0f)).translate(5.0f, 10.0f, 5.0f).scale(10.0f);
+            earth.applyTexture(new Texture("./res/earth.png"));
+            scene.add(earth);
         } catch (IOException err) {
             err.printStackTrace();
             System.exit(1);
@@ -95,10 +99,10 @@ public class Main {
                         upward = -1;
                         break;
                     case GLFW_KEY_UP:
-                        forward++;
+                        forward = 1;
                         break;
                     case GLFW_KEY_RIGHT:
-                        rightward++;
+                        rightward = 1;
                         break;
                     case GLFW_KEY_DOWN:
                         forward = -1;
@@ -107,7 +111,7 @@ public class Main {
                         rightward = -1;
                         break;
                     case GLFW_KEY_W:
-                        rotForward++;
+                        rotForward = 1;
                         break;
                     case GLFW_KEY_D:
                         rotRightward = 1;
@@ -160,57 +164,25 @@ public class Main {
                 // Set near walls transparent
                 float rot = camera.getOrientation().y;
                 if (Math.cos(rot) > 0.0 && Math.sin(rot) >= 0.0) {
-                    for (int i : posXWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
-                    for (int i : posZWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
-                    for (int i : negXWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
-                    for (int i : negZWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
+                    for (int i : posXWall) scene.getLine(i).setOpacity(0.5f);
+                    for (int i : posZWall) scene.getLine(i).setOpacity(0.1f);
+                    for (int i : negXWall) scene.getLine(i).setOpacity(0.1f);
+                    for (int i : negZWall) scene.getLine(i).setOpacity(0.5f);
                 } else if (Math.cos(rot) <= 0.0 && Math.sin(rot) > 0.0) {
-                    for (int i : posXWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
-                    for (int i : posZWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
-                    for (int i : negXWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
-                    for (int i : negZWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
+                    for (int i : posXWall) scene.getLine(i).setOpacity(0.5f);
+                    for (int i : posZWall) scene.getLine(i).setOpacity(0.5f);
+                    for (int i : negXWall) scene.getLine(i).setOpacity(0.1f);
+                    for (int i : negZWall) scene.getLine(i).setOpacity(0.1f);
                 } else if (Math.cos(rot) < 0.0 && Math.sin(rot) <= 0.0) {
-                    for (int i : posXWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
-                    for (int i : posZWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
-                    for (int i : negXWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
-                    for (int i : negZWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
+                    for (int i : posXWall) scene.getLine(i).setOpacity(0.1f);
+                    for (int i : posZWall) scene.getLine(i).setOpacity(0.5f);
+                    for (int i : negXWall) scene.getLine(i).setOpacity(0.5f);
+                    for (int i : negZWall) scene.getLine(i).setOpacity(0.1f);
                 } else if (Math.cos(rot) >= 0.0 && Math.sin(rot) < 0.0) {
-                    for (int i : posXWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
-                    for (int i : posZWall) {
-                        scene.getLine(i).setOpacity(0.1f);
-                    }
-                    for (int i : negXWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
-                    for (int i : negZWall) {
-                        scene.getLine(i).setOpacity(0.5f);
-                    }
+                    for (int i : posXWall) scene.getLine(i).setOpacity(0.1f);
+                    for (int i : posZWall) scene.getLine(i).setOpacity(0.1f);
+                    for (int i : negXWall) scene.getLine(i).setOpacity(0.5f);
+                    for (int i : negZWall) scene.getLine(i).setOpacity(0.5f);
                 }
             }
             prevMouseX = mouseX;

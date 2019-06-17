@@ -31,7 +31,7 @@ public class Block {
                 color = new Vector3f(1.0f, 1.0f, 0.0f);
                 break;
             case 1:
-                color = new Vector3f(0.5f, 0.9f, 1.0f);
+                color = new Vector3f(0.0f, 1.0f, 1.0f);
                 break;
             case 2:
                 color = new Vector3f(1.0f, 0.0f, 1.0f);

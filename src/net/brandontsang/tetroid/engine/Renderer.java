@@ -30,6 +30,14 @@ public class Renderer {
             scene.getShaderProgram().setUniform("reflectivity", mesh.getMaterial().getReflectivity());
             scene.getShaderProgram().setUniform("shininess", mesh.getMaterial().getShininess());
             
+            if (mesh.isTextured) {
+                scene.getShaderProgram().setUniform("isTextured", 1);
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, mesh.getTextureLoc());
+            } else {
+                scene.getShaderProgram().setUniform("isTextured", 0);
+            }
+            
             glBindVertexArray(mesh.getVao());
             glDrawArrays(GL_TRIANGLES, 0, mesh.numVerts());
         }
