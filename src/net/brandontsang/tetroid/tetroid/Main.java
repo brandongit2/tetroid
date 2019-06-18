@@ -1,6 +1,9 @@
 package net.brandontsang.tetroid.tetroid;
 
 import net.brandontsang.tetroid.engine.*;
+import net.brandontsang.tetroid.engine.gui.Font;
+import net.brandontsang.tetroid.engine.gui.Rectangle;
+import net.brandontsang.tetroid.engine.gui.Text;
 import net.brandontsang.tetroid.engine.lights.SunLight;
 import net.brandontsang.tetroid.engine.materials.PhongMaterial;
 import org.joml.Vector3f;
@@ -16,9 +19,10 @@ import static org.lwjgl.opengl.GL20.*;
 public class Main {
     private Window window;
     
-    private ShaderProgram program;
-    private int           vao;
-            Scene         scene;
+    public static int program_3d;
+    public static int program_gui;
+    private int       vao;
+            Scene     scene;
     
     private double prevMouseX = 0;
     private double prevMouseY = 0;
@@ -40,32 +44,53 @@ public class Main {
         
         scene = new Scene(window);
         
-        program = new ShaderProgram();
-        glUseProgram(program.pointer());
-        program.createUniform("projectionMatrix");
-        program.createUniform("viewMatrix");
-        program.createUniform("modelMatrix");
-        program.createUniform("matId");
-        program.createUniform("isTextured");
-        program.createUniform("opacity");
-        program.createUniform("ambient");
-        program.createUniform("cameraPos");
-        program.createUniform("reflectivity");
-        program.createUniform("shininess");
+        ShaderProgram _program_3d = new ShaderProgram(
+            "./src/net/brandontsang/tetroid/tetroid/shaders/3d.vert.glsl",
+            "./src/net/brandontsang/tetroid/tetroid/shaders/3d.frag.glsl"
+        );
+        glUseProgram(_program_3d.pointer());
+        _program_3d.createUniform("projectionMatrix");
+        _program_3d.createUniform("viewMatrix");
+        _program_3d.createUniform("modelMatrix");
+        _program_3d.createUniform("matId");
+        _program_3d.createUniform("isTextured");
+        _program_3d.createUniform("opacity");
+        _program_3d.createUniform("ambient");
+        _program_3d.createUniform("cameraPos");
+        _program_3d.createUniform("reflectivity");
+        _program_3d.createUniform("shininess");
         for (int i = 0; i < 3; i++) {
-            program.createUniform("lightType[" + i + "]");
-            program.createUniform("lightColor[" + i + "]");
-            program.createUniform("lightPos[" + i + "]");
-            program.createUniform("lightDir[" + i + "]");
+            _program_3d.createUniform("lightType[" + i + "]");
+            _program_3d.createUniform("lightColor[" + i + "]");
+            _program_3d.createUniform("lightPos[" + i + "]");
+            _program_3d.createUniform("lightDir[" + i + "]");
         }
-        scene.setShaderProgram(program);
+        program_3d = scene.add(_program_3d);
+        
+        ShaderProgram _program_gui = new ShaderProgram(
+            "./src/net/brandontsang/tetroid/tetroid/shaders/gui.vert.glsl",
+            "./src/net/brandontsang/tetroid/tetroid/shaders/gui.frag.glsl"
+        );
+        glUseProgram(_program_gui.pointer());
+        _program_gui.createUniform("projectionMatrix");
+        _program_gui.createUniform("modelMatrix");
+        _program_gui.createUniform("isTextured");
+        _program_gui.createUniform("opacity");
+        _program_gui.createUniform("textureId");
+        _program_gui.createUniform("textColor");
+        program_gui = scene.add(_program_gui);
+        
+        Font openSans = new Font("./res/fonts/OpenSans-Regular.ttf", 36, scene);
+        Text txt = openSans.renderText("Welcome to Tetroid!");
+        txt.translate((window.width() - txt.getWidth()) / 2, 0.0f);
+        scene.add(txt);
         
         drawWalls();
         
         try {
             scene.add(Mesh.fromFile("./res/models/plane.obj", new PhongMaterial(new Vector3f(0.1f, 0.1f, 0.1f), 0.5f, 10.0f)).translate(0.0f, -0.01f, 0.0f));
-            Mesh earth = Mesh.fromFile("./res/models/earth.obj", new PhongMaterial(new Vector3f(1.0f, 1.0f, 1.0f), 0.8f, 1000.0f)).translate(5.0f, 10.0f, 5.0f).scale(10.0f);
-            earth.applyTexture(new Texture("./res/earth.png"));
+            Mesh earth = Mesh.fromFile("./res/models/earth.obj", new PhongMaterial(new Vector3f(1.0f, 1.0f, 1.0f), 0.8f, 1000.0f)).translate(15.0f, 10.0f, 5.0f).scale(3.0f);
+            earth.applyTexture(new Texture("./res/images/earth.png"));
             scene.add(earth);
         } catch (IOException err) {
             err.printStackTrace();

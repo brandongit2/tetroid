@@ -1,5 +1,6 @@
 package net.brandontsang.tetroid.engine;
 
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
@@ -7,6 +8,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwSetWindowPos;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
+import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
@@ -16,9 +18,12 @@ public class Window {
     private float xscale;
     private float yscale;
     
+    public Matrix4f guiProjectionMatrix;
+    
     public Window(int width, int height, String title) {
         this.width = width;
         this.height = height;
+        guiProjectionMatrix = new Matrix4f().ortho(0.0f, width, height, 0.0f, -500.0f, 500.0f);
         
         // Set window context hints.
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -36,12 +41,6 @@ public class Window {
         GL.createCapabilities();
         System.out.println("OpenGL version " + glGetString(GL_VERSION));
     
-        glfwSetFramebufferSizeCallback(window, (long window, int w, int h) -> {
-            this.width = w;
-            this.height = h;
-            glViewport(0, 0, w, h);
-        });
-    
         glfwSwapInterval(1);
     
         // Get screen dimensions and display scaling factor.
@@ -55,11 +54,18 @@ public class Window {
         GLFWVidMode vidMode      = glfwGetVideoMode(monitor);
         float       screenWidth  = vidMode.width();
         float       screenHeight = vidMode.height();
-    
+        
         // Center screen.
         int xpos = (int) (screenWidth - width * xscale[0]) / 2;
         int ypos = (int) (screenHeight- height * yscale[0]) / 2;
         glfwSetWindowPos(window, xpos, ypos);
+        
+        glfwSetFramebufferSizeCallback(window, (long window, int w, int h) -> {
+            this.width = w;
+            this.height = h;
+            this.guiProjectionMatrix = new Matrix4f().ortho(0.0f, w / this.xscale, h / this.yscale, 0.0f, -500.0f, 500.0f);
+            glViewport(0, 0, w, h);
+        });
         
         glLineWidth(this.xscale);
         glEnable(GL_DEPTH_TEST);
@@ -67,6 +73,7 @@ public class Window {
         glEnable(GL_MULTISAMPLE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
+        stbi_set_flip_vertically_on_load(true);
     }
     
     public long pointer() {

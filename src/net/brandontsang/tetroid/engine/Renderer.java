@@ -1,6 +1,11 @@
 package net.brandontsang.tetroid.engine;
 
+import net.brandontsang.tetroid.engine.gui.Char;
+import net.brandontsang.tetroid.engine.gui.Font;
+import net.brandontsang.tetroid.engine.gui.Rectangle;
+import net.brandontsang.tetroid.engine.gui.Text;
 import net.brandontsang.tetroid.engine.lights.Light;
+import net.brandontsang.tetroid.tetroid.Main;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -15,27 +20,31 @@ public class Renderer {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        glUseProgram(scene.getShaderProgram().pointer());
+        glUseProgram(scene.getShaderProgram(Main.program_3d).pointer());
+        ShaderProgram program = scene.getShaderProgram(Main.program_3d);
         
-        scene.getShaderProgram().setUniform("ambient", scene.getAmbientLight());
-        scene.getShaderProgram().setUniform("cameraPos", scene.getCurrentCamera().getPosition());
+        program.setUniform("ambient", scene.getAmbientLight());
+        program.setUniform("cameraPos", scene.getCurrentCamera().getPosition());
     
-        scene.getShaderProgram().setUniform("projectionMatrix", scene.getCurrentCamera().projectionMatrix());
-        scene.getShaderProgram().setUniform("viewMatrix", scene.getCurrentCamera().viewMatrix());
+        program.setUniform("projectionMatrix", scene.getCurrentCamera().projectionMatrix());
+        program.setUniform("viewMatrix", scene.getCurrentCamera().viewMatrix());
         
+        int numTextures = 0;
         for (Mesh mesh : scene.getMeshes()) {
-            scene.getShaderProgram().setUniform("modelMatrix", mesh.getModelMatrix());
-            scene.getShaderProgram().setUniform("matId", mesh.getMaterial().matId());
-            scene.getShaderProgram().setUniform("opacity", mesh.getMaterial().getOpacity());
-            scene.getShaderProgram().setUniform("reflectivity", mesh.getMaterial().getReflectivity());
-            scene.getShaderProgram().setUniform("shininess", mesh.getMaterial().getShininess());
+            program.setUniform("modelMatrix", mesh.getModelMatrix());
+            program.setUniform("matId", mesh.getMaterial().matId());
+            program.setUniform("opacity", mesh.getMaterial().getOpacity());
+            program.setUniform("reflectivity", mesh.getMaterial().getReflectivity());
+            program.setUniform("shininess", mesh.getMaterial().getShininess());
             
             if (mesh.isTextured) {
-                scene.getShaderProgram().setUniform("isTextured", 1);
-                glActiveTexture(GL_TEXTURE0);
+                program.setUniform("isTextured", 1);
+                
+                glActiveTexture(GL_TEXTURE0 + numTextures);
                 glBindTexture(GL_TEXTURE_2D, mesh.getTextureLoc());
+                numTextures++;
             } else {
-                scene.getShaderProgram().setUniform("isTextured", 0);
+                program.setUniform("isTextured", 0);
             }
             
             glBindVertexArray(mesh.getVao());
@@ -43,9 +52,9 @@ public class Renderer {
         }
         
         for (Line line : scene.getLines()) {
-            scene.getShaderProgram().setUniform("modelMatrix", line.getModelMatrix());
-            scene.getShaderProgram().setUniform("matId", 0);
-            scene.getShaderProgram().setUniform("opacity", line.getOpacity());
+            program.setUniform("modelMatrix", line.getModelMatrix());
+            program.setUniform("matId", 0);
+            program.setUniform("opacity", line.getOpacity());
     
             glBindVertexArray(line.getVao());
             glDrawArrays(GL_LINES, 0, 2);
@@ -55,17 +64,63 @@ public class Renderer {
         for (int i = 0; i < 3; i++) {
             if (i < lights.size()) {
                 Light light = lights.get(i);
-                scene.getShaderProgram().setUniform("lightType[" + i + "]", light.lightType());
-                scene.getShaderProgram().setUniform("lightColor[" + i + "]", light.getColor());
-                scene.getShaderProgram().setUniform("lightPos[" + i + "]", light.getPosition());
-                scene.getShaderProgram().setUniform("lightDir[" + i + "]", light.getDirection());
+                program.setUniform("lightType[" + i + "]", light.lightType());
+                program.setUniform("lightColor[" + i + "]", light.getColor());
+                program.setUniform("lightPos[" + i + "]", light.getPosition());
+                program.setUniform("lightDir[" + i + "]", light.getDirection());
             } else {
-                scene.getShaderProgram().setUniform("lightType[" + i + "]", 0);
-                scene.getShaderProgram().setUniform("lightColor[" + i + "]", new Vector3f(0.0f, 0.0f, 0.0f));
-                scene.getShaderProgram().setUniform("lightPos[" + i + "]", new Vector3f(0.0f, 0.0f, 0.0f));
-                scene.getShaderProgram().setUniform("lightDir[" + i + "]", new Vector3f(0.0f, -1.0f, 0.0f));
+                program.setUniform("lightType[" + i + "]", 0);
+                program.setUniform("lightColor[" + i + "]", new Vector3f(0.0f, 0.0f, 0.0f));
+                program.setUniform("lightPos[" + i + "]", new Vector3f(0.0f, 0.0f, 0.0f));
+                program.setUniform("lightDir[" + i + "]", new Vector3f(0.0f, -1.0f, 0.0f));
             }
         }
+        
+        glUseProgram(scene.getShaderProgram(Main.program_gui).pointer());
+        program = scene.getShaderProgram(Main.program_gui);
+        
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+        program.setUniform("projectionMatrix", scene.window().guiProjectionMatrix);
+        
+        numTextures = 0;
+        for (Rectangle rectangle : scene.getRectangles()) {
+            program.setUniform("modelMatrix", rectangle.getModelMatrix());
+            program.setUniform("opacity", rectangle.getOpacity());
+            if (rectangle.isTextured()) {
+                program.setUniform("isTextured", 1);
+                program.setUniform("textureId", numTextures);
+        
+                glActiveTexture(GL_TEXTURE0 + numTextures);
+                glBindTexture(GL_TEXTURE_2D, rectangle.getTextureLoc());
+                numTextures++;
+            } else {
+                program.setUniform("isTextured", 0);
+            }
+            
+            glBindVertexArray(rectangle.getVao());
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        }
+        
+        for (Text text : scene.getTexts()) {
+            program.setUniform("isTextured", 1);
+            program.setUniform("textColor", text.getColor());
+            program.setUniform("opacity", text.getOpacity());
+            
+            for (Char ch : text.getChars()) {
+                program.setUniform("modelMatrix", ch.getModelMatrix());
+                program.setUniform("textureId", numTextures);
+                
+                glActiveTexture(GL_TEXTURE0 + numTextures);
+                glBindTexture(GL_TEXTURE_2D, text.getFont().textureLoc);
+                numTextures++;
+                
+                glBindVertexArray(ch.getVao());
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            }
+        }
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
         
         glBindVertexArray(0);
         

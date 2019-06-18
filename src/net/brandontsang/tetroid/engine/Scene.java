@@ -1,5 +1,7 @@
 package net.brandontsang.tetroid.engine;
 
+import net.brandontsang.tetroid.engine.gui.Rectangle;
+import net.brandontsang.tetroid.engine.gui.Text;
 import net.brandontsang.tetroid.engine.lights.Light;
 import org.joml.Vector3f;
 
@@ -7,20 +9,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Scene {
-    private ArrayList<Mesh>   meshes  = new ArrayList<>();
-    private ArrayList<Line>   lines   = new ArrayList<>();
-    private ArrayList<Camera> cameras = new ArrayList<>();
-    private ArrayList<Light>  lights  = new ArrayList<>();
+    private ArrayList<Mesh>          meshes         = new ArrayList<>();
+    private ArrayList<Line>          lines          = new ArrayList<>();
+    private ArrayList<Camera>        cameras        = new ArrayList<>();
+    private ArrayList<Light>         lights         = new ArrayList<>();
+    private ArrayList<Rectangle>     rectangles     = new ArrayList<>();
+    private ArrayList<Text>          texts          = new ArrayList<>();
+    private ArrayList<ShaderProgram> shaderPrograms = new ArrayList<>();
     
     private Window        window;
-    private ShaderProgram shaderProgram;
     private Vector3f      ambientLight;
     
     private int currentCamera;
     
     public Scene(Window window) {
-        this.window        = window;
-        this.shaderProgram = new ShaderProgram();
+        this.window = window;
     }
     
     public int add(Mesh mesh) {
@@ -57,6 +60,21 @@ public class Scene {
         return this.lights.size() - 1;
     }
     
+    public int add(Rectangle rectangle) {
+        this.rectangles.add(rectangle);
+        return this.rectangles.size() - 1;
+    }
+    
+    public int add(Text text) {
+        this.texts.add(text);
+        return this.texts.size() - 1;
+    }
+    
+    public int add(ShaderProgram shaderProgram) {
+        this.shaderPrograms.add(shaderProgram);
+        return this.shaderPrograms.size() - 1;
+    }
+    
     public void setCurrentCamera(int i) {
         this.currentCamera = i;
     }
@@ -69,10 +87,6 @@ public class Scene {
         return window;
     }
     
-    public void setShaderProgram(ShaderProgram program) {
-        this.shaderProgram = program;
-    }
-    
     public void setAmbientLight(Vector3f color) {
         this.ambientLight = color;
     }
@@ -81,8 +95,8 @@ public class Scene {
         return this.ambientLight;
     }
     
-    public ShaderProgram getShaderProgram() {
-        return this.shaderProgram;
+    public ShaderProgram getShaderProgram(int i) {
+        return this.shaderPrograms.get(i);
     }
     
     public ArrayList<Mesh> getMeshes() {
@@ -103,5 +117,13 @@ public class Scene {
     
     public Light getLight(int i) {
         return this.lights.get(i);
+    }
+    
+    public ArrayList<Rectangle> getRectangles() {
+        return this.rectangles;
+    }
+    
+    public ArrayList<Text> getTexts() {
+        return this.texts;
     }
 }

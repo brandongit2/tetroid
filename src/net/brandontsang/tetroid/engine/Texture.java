@@ -5,7 +5,6 @@ import org.lwjgl.BufferUtils;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.glGenerateMipmap;
@@ -35,7 +34,6 @@ public class Texture {
             int h = _h.get(0);
             
             loc = glGenTextures();
-            
             glBindTexture(GL_TEXTURE_2D, loc);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
             glGenerateMipmap(GL_TEXTURE_2D);

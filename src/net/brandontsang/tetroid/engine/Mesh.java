@@ -180,7 +180,7 @@ public class Mesh {
                                 _vt[i].append(ch);
                             }
                         }
-                        texCoordsIndexed[currentIndexedTexCoord * 2 + i] = -Float.parseFloat(_vt[i].toString());
+                        texCoordsIndexed[currentIndexedTexCoord * 2 + i] = Float.parseFloat(_vt[i].toString());
                         currentIndexedTexCoord++;
                         break;
                     }
