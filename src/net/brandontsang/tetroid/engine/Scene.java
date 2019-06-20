@@ -10,12 +10,14 @@ import java.util.Arrays;
 
 public class Scene {
     private ArrayList<Mesh>          meshes         = new ArrayList<>();
+    private ArrayList<Collection>    collections    = new ArrayList<>();
     private ArrayList<Line>          lines          = new ArrayList<>();
     private ArrayList<Camera>        cameras        = new ArrayList<>();
     private ArrayList<Light>         lights         = new ArrayList<>();
     private ArrayList<Rectangle>     rectangles     = new ArrayList<>();
     private ArrayList<Text>          texts          = new ArrayList<>();
     private ArrayList<ShaderProgram> shaderPrograms = new ArrayList<>();
+    private ArrayList<DepthMap>      depthMaps      = new ArrayList<>();
     
     private Window        window;
     private Vector3f      ambientLight;
@@ -75,6 +77,24 @@ public class Scene {
         return this.shaderPrograms.size() - 1;
     }
     
+    public int add(Collection collection) {
+        this.collections.add(collection);
+        for (Mesh mesh : collection.getMeshes()) {
+            add(mesh);
+        }
+        return this.collections.size() - 1;
+    }
+    
+    public void add(DepthMap depthMap) {
+        this.depthMaps.add(depthMap);
+    }
+    
+    public void remove(Mesh mesh) {
+        for (int i = 0; i < this.meshes.size(); i++) {
+            if (this.meshes.get(i) == mesh) this.meshes.set(i, null);
+        }
+    }
+    
     public void setCurrentCamera(int i) {
         this.currentCamera = i;
     }
@@ -103,6 +123,10 @@ public class Scene {
         return this.meshes;
     }
     
+    public Mesh getMesh(int i) {
+        return this.meshes.get(i);
+    }
+    
     public ArrayList<Line> getLines() {
         return this.lines;
     }
@@ -125,5 +149,13 @@ public class Scene {
     
     public ArrayList<Text> getTexts() {
         return this.texts;
+    }
+    
+    public ArrayList<DepthMap> getDepthMaps() {
+        return this.depthMaps;
+    }
+    
+    public DepthMap getDepthMap(int i) {
+        return this.depthMaps.get(i);
     }
 }

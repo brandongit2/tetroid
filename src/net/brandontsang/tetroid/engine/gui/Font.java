@@ -98,8 +98,13 @@ public class Font {
     }
     
     public Text renderText(String text) {
-        float scale = stbtt_ScaleForPixelHeight(this.fontInfo, this.fontHeight);
         Text textObj = new Text(this);
+        renderText(text, textObj);
+        return textObj;
+    }
+    
+    public void renderText(String text, Text instance) {
+        float scale = stbtt_ScaleForPixelHeight(this.fontInfo, this.fontHeight);
         
         try (MemoryStack stack = stackPush()) {
             IntBuffer pCodePoint = stack.mallocInt(1);
@@ -140,11 +145,9 @@ public class Font {
                 float y0 = scale(lineY, q.y0(), factorY);
                 float y1 = scale(lineY, q.y1(), factorY);
                 
-                textObj.addCharacter(new Char(this.bitmap, x0, y0, x1, y1, q.s0(), q.t0(), q.s1(), q.t1(), this.fontHeight));
+                instance.addCharacter(new Char(this.bitmap, x0, y0, x1, y1, q.s0(), q.t0(), q.s1(), q.t1(), this.fontHeight));
             }
         }
-        
-        return textObj;
     }
     
     private static int getCodePoint(String text, int to, int i, IntBuffer cpOut) {

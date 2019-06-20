@@ -21,8 +21,6 @@ public class Window {
     public Matrix4f guiProjectionMatrix;
     
     public Window(int width, int height, String title) {
-        this.width = width;
-        this.height = height;
         guiProjectionMatrix = new Matrix4f().ortho(0.0f, width, height, 0.0f, -500.0f, 500.0f);
         
         // Set window context hints.
@@ -50,6 +48,9 @@ public class Window {
         glfwGetMonitorContentScale(monitor, xscale, yscale);
         this.xscale = xscale[0];
         this.yscale = yscale[0];
+    
+        this.width = (int) (width * this.xscale);
+        this.height = (int) (height * this.yscale);
         
         GLFWVidMode vidMode      = glfwGetVideoMode(monitor);
         float       screenWidth  = vidMode.width();

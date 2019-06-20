@@ -2,11 +2,13 @@ package net.brandontsang.tetroid.engine;
 
 import net.brandontsang.tetroid.engine.materials.Material;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL15.*;
@@ -23,6 +25,9 @@ public class Mesh {
     private Texture texture;
     private Material material;
     
+    private Vector3f position    = new Vector3f();
+    private Vector3f rotation    = new Vector3f();
+    private float    scale       = 1.0f;
     private Matrix4f modelMatrix = new Matrix4f();
     
     public Mesh(float[] vertices, float[] texCoords, float[] vertNorms, Material material) {
@@ -75,7 +80,7 @@ public class Mesh {
     }
     
     public static Mesh fromFile(String fileLocation, Material material) throws IOException {
-        BufferedReader buf = new BufferedReader(new FileReader(fileLocation));
+        BufferedReader buf = new BufferedReader(new InputStreamReader(Util.class.getResourceAsStream(fileLocation)));
     
         int numVerts     = 0;
         int numTexCoords = 0;
@@ -116,7 +121,7 @@ public class Mesh {
         buf.close();
         
         // Parse OBJ files.
-        buf = new BufferedReader(new FileReader(fileLocation));
+        buf = new BufferedReader(new InputStreamReader(Util.class.getResourceAsStream(fileLocation)));
         
         // OpenGL only supports one index per VAO. Since OBJs store three separate indices
         // (one for each of vertices, texture coordinates, and vertex normals), it is
@@ -287,6 +292,10 @@ public class Mesh {
         return this.modelMatrix;
     }
     
+    public Vector3f getPosition() {
+        return this.position;
+    }
+    
     public Material getMaterial() {
         return this.material;
     }
@@ -301,20 +310,33 @@ public class Mesh {
     
     // Angle in degrees.
     public Mesh rotate(float rx, float ry, float rz) {
-        this.modelMatrix.rotate((float) Math.toRadians(rz), 0, 0, 1);
-        this.modelMatrix.rotate((float) Math.toRadians(rx), 1, 0, 0);
-        this.modelMatrix.rotate((float) Math.toRadians(ry), 0, 1, 0);
+        this.rotation.add(rx, ry, rz);
+        transform();
         return this;
     }
     
     public Mesh translate(float dx, float dy, float dz) {
-        this.modelMatrix.translate(dx, dy, dz);
+        this.position.add(dx, dy, dz);
+        transform();
         return this;
     }
     
     public Mesh scale(float factor) {
-        this.modelMatrix.scale(factor);
+        this.scale *= factor;
+        transform();
         return this;
+    }
+    
+    private void transform() {
+        this.modelMatrix.identity();
+    
+        this.modelMatrix.translate(this.position);
+    
+        this.modelMatrix.rotate((float) Math.toRadians(this.rotation.z), 0, 0, 1);
+        this.modelMatrix.rotate((float) Math.toRadians(this.rotation.x), 1, 0, 0);
+        this.modelMatrix.rotate((float) Math.toRadians(this.rotation.y), 0, 1, 0);
+    
+        this.modelMatrix.scale(this.scale);
     }
     
     public Mesh setTranslation(float x, float y, float z) {

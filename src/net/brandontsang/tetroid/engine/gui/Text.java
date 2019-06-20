@@ -30,6 +30,12 @@ public class Text {
         return this;
     }
     
+    public Text setText(String text) {
+        this.aChars.clear();
+        this.font.renderText(text, this);
+        return this;
+    }
+    
     public Text setColor(Vector3f color) {
         this.color = color;
         return this;

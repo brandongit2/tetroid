@@ -59,11 +59,11 @@ public class ShaderProgram {
         return this.program;
     }
     
-    public void createUniform(String name) throws RuntimeException {
+    public void createUniform(String name) {
         glUseProgram(this.program);
         int uniformLocation = glGetUniformLocation(this.program, name);
         if (uniformLocation < 0) {
-            throw new RuntimeException("Could not find uniform " + name);
+            System.err.println("Could not find uniform " + name);
         }
         uniforms.put(name, uniformLocation);
     }

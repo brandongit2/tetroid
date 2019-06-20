@@ -231,9 +231,14 @@ class GameGrid {
     }
     
     private static void clearActive() {
+        Main.incrementScore(10);
         existsActiveTetromino = false;
         for (int i = 0; i < active.length; i++) {
             active[i] = -1;
         }
+    }
+    
+    public static ArrayList<Block> getBlocks() {
+        return blocks;
     }
 }

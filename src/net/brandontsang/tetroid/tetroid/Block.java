@@ -57,7 +57,7 @@ public class Block {
         }
         
         try {
-            this.mesh = Mesh.fromFile("./res/models/block.obj", new PhongMaterial(color, 0.5f, 1000.0f)).translate(pos.x, pos.y, pos.z);
+            this.mesh = Mesh.fromFile("/res/models/block.obj", new PhongMaterial(color, 0.5f, 1000.0f)).translate(pos.x, pos.y, pos.z);
         } catch (IOException err) {
             err.printStackTrace();
             System.exit(1);
@@ -67,6 +67,10 @@ public class Block {
     void setPos(Vector3i pos) {
         this.pos = pos;
         this.mesh.setTranslation(pos.x, pos.y, pos.z);
+    }
+    
+    Vector3i getPos() {
+        return this.pos;
     }
     
     public Mesh getMesh() {

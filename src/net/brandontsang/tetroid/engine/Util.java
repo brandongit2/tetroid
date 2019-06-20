@@ -1,12 +1,17 @@
 package net.brandontsang.tetroid.engine;
 
+import com.google.common.io.ByteStreams;
+
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.*;
 
 public class Util {
     public static byte[] readFile(String path) throws IOException {
-        return Files.readAllBytes(Paths.get(path));
+        InputStream in = Util.class.getResourceAsStream(path);
+        return ByteStreams.toByteArray(in);
     }
     
     public static String readFileAsString(String path) throws IOException {

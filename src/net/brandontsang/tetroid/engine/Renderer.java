@@ -1,7 +1,6 @@
 package net.brandontsang.tetroid.engine;
 
 import net.brandontsang.tetroid.engine.gui.Char;
-import net.brandontsang.tetroid.engine.gui.Font;
 import net.brandontsang.tetroid.engine.gui.Rectangle;
 import net.brandontsang.tetroid.engine.gui.Text;
 import net.brandontsang.tetroid.engine.lights.Light;
@@ -20,6 +19,13 @@ public class Renderer {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
+        // Render depth maps
+        for (DepthMap depthMap : scene.getDepthMaps()) {
+            depthMap.renderDepthMap();
+            glViewport(0, 0, scene.window().width(), scene.window().height());
+        }
+        
+        // Render actual scene
         glUseProgram(scene.getShaderProgram(Main.program_3d).pointer());
         ShaderProgram program = scene.getShaderProgram(Main.program_3d);
         
@@ -28,9 +34,18 @@ public class Renderer {
     
         program.setUniform("projectionMatrix", scene.getCurrentCamera().projectionMatrix());
         program.setUniform("viewMatrix", scene.getCurrentCamera().viewMatrix());
-        
+        program.setUniform("lightSpaceMatrix", scene.getDepthMap(0).getLightSpaceMatrix());
+    
         int numTextures = 0;
+        int depthMapTextureTile = numTextures++;
+        glActiveTexture(GL_TEXTURE0 + depthMapTextureTile);
+        glBindTexture(GL_TEXTURE_2D, scene.getDepthMap(0).getDepthMap());
+        
+        program.setUniform("depthMap", depthMapTextureTile);
+        
         for (Mesh mesh : scene.getMeshes()) {
+            if (mesh == null) continue;
+            
             program.setUniform("modelMatrix", mesh.getModelMatrix());
             program.setUniform("matId", mesh.getMaterial().matId());
             program.setUniform("opacity", mesh.getMaterial().getOpacity());
@@ -39,6 +54,7 @@ public class Renderer {
             
             if (mesh.isTextured) {
                 program.setUniform("isTextured", 1);
+                program.setUniform("textureTile", numTextures);
                 
                 glActiveTexture(GL_TEXTURE0 + numTextures);
                 glBindTexture(GL_TEXTURE_2D, mesh.getTextureLoc());
@@ -86,11 +102,13 @@ public class Renderer {
         numTextures = 0;
         for (Rectangle rectangle : scene.getRectangles()) {
             program.setUniform("modelMatrix", rectangle.getModelMatrix());
+            program.setUniform("elementType", 0);
             program.setUniform("opacity", rectangle.getOpacity());
+            
             if (rectangle.isTextured()) {
                 program.setUniform("isTextured", 1);
-                program.setUniform("textureId", numTextures);
-        
+                program.setUniform("textureTile", numTextures);
+                
                 glActiveTexture(GL_TEXTURE0 + numTextures);
                 glBindTexture(GL_TEXTURE_2D, rectangle.getTextureLoc());
                 numTextures++;
@@ -103,13 +121,13 @@ public class Renderer {
         }
         
         for (Text text : scene.getTexts()) {
-            program.setUniform("isTextured", 1);
+            program.setUniform("elementType", 1);
             program.setUniform("textColor", text.getColor());
             program.setUniform("opacity", text.getOpacity());
             
             for (Char ch : text.getChars()) {
                 program.setUniform("modelMatrix", ch.getModelMatrix());
-                program.setUniform("textureId", numTextures);
+                program.setUniform("textureTile", numTextures);
                 
                 glActiveTexture(GL_TEXTURE0 + numTextures);
                 glBindTexture(GL_TEXTURE_2D, text.getFont().textureLoc);
