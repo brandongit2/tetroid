@@ -2,6 +2,9 @@ package net.brandontsang.tetroid.tetroid;
 
 import net.brandontsang.tetroid.engine.Renderer;
 import net.brandontsang.tetroid.engine.Scene;
+import net.brandontsang.tetroid.engine.gui.Font;
+import net.brandontsang.tetroid.engine.gui.Text;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
@@ -12,6 +15,7 @@ import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 class RenderLoop {
     private static final long    nsPerTick = 1000000000 / 60;
     private static       boolean run       = false;
+    private static       boolean playing   = true;
     private static       long    tick      = 0;
     
     private static ArrayList<RenderLoopAttatchment> attatchments = new ArrayList<>();
@@ -23,7 +27,7 @@ class RenderLoop {
         while (run) {
             if (glfwWindowShouldClose(scene.window().pointer())) run = false;
             
-            if (tick % 30 == 0) {
+            if (tick % 30 == 0 && playing) {
                 if (GameGrid.existsActiveTetromino) {
                     GameGrid.translate(new Vector3i(0, -1, 0));
                     
@@ -84,5 +88,14 @@ class RenderLoop {
     
     static void attach(RenderLoopAttatchment attatchment) {
         attatchments.add(attatchment);
+    }
+    
+    static void endGame() {
+        playing = false;
+        Font fnt = new Font("/res/fonts/OpenSans-ExtraBold.ttf", 45, Main.scene);
+        Text txt = fnt.renderText("Game over!");
+        txt.translate((Main.scene.window().width() / Main.scene.window().dpiScale()[0] - txt.getWidth()) / 2, (Main.scene.window().height() / Main.scene.window().dpiScale()[1] - txt.getFont().getFontHeight()) / 2);
+        txt.setColor(new Vector3f(1.0f, 0.0f, 0.0f));
+        Main.scene.add(txt);
     }
 }

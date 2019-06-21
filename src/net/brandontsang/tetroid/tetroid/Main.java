@@ -1,7 +1,6 @@
 package net.brandontsang.tetroid.tetroid;
 
 import net.brandontsang.tetroid.engine.*;
-import net.brandontsang.tetroid.engine.gui.Rectangle;
 import net.brandontsang.tetroid.engine.lights.SunLight;
 import net.brandontsang.tetroid.engine.materials.PhongMaterial;
 import org.joml.Vector2f;

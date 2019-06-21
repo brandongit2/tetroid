@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 class Gui {
     private Scene scene;
-    private Font  openSans;
+    public  Font  openSans;
     
     private RenderLoopAttatchment a;
     

@@ -162,4 +162,8 @@ public class Font {
         cpOut.put(0, c1);
         return 1;
     }
+    
+    public int getFontHeight() {
+        return this.fontHeight;
+    }
 }

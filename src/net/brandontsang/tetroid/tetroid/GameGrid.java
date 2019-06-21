@@ -28,10 +28,20 @@ class GameGrid {
         Tetromino tetromino = Tetromino.random();
         for (int i = 0; i < tetromino.getPositions().length; i++) {
             blocks.add(new Block(tetromino.getColor(), tetromino.getPositions()[i]));
-            active[i] = blocks.size() - 1;
+            GameGrid.active[i] = blocks.size() - 1;
             GameGrid.ghosts[i].setColor(tetromino.getColor());
         }
         GameGrid.pivot = tetromino.getPivot();
+        
+        outerLoop:
+        for (Block block : GameGrid.blocks) {
+            for (int i = 0; i < GameGrid.active.length; i++) {
+                if (block == GameGrid.blocks.get(GameGrid.active[i])) continue outerLoop;
+            }
+            for (int i = 0; i < GameGrid.active.length; i++) {
+                if (GameGrid.blocks.get(GameGrid.active[i]).getPos().equals(block.getPos())) RenderLoop.endGame();
+            }
+        }
         
         updateGhosts();
     }
