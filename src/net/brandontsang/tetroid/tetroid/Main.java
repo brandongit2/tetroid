@@ -4,11 +4,14 @@ import net.brandontsang.tetroid.engine.*;
 import net.brandontsang.tetroid.engine.gui.Rectangle;
 import net.brandontsang.tetroid.engine.lights.SunLight;
 import net.brandontsang.tetroid.engine.materials.PhongMaterial;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.lwjgl.glfw.Callbacks.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -17,11 +20,11 @@ import static org.lwjgl.opengl.GL20.*;
 public class Main {
     private Window window;
     
-    public  static int   program_3d;
-    public  static int   program_gui;
-    public  static int   program_depthMap;
-    private static Scene scene;
-            static Gui   gui;
+    public static int   program_3d;
+    public static int   program_gui;
+    public static int   program_depthMap;
+    public static Scene scene;
+           static Gui   gui;
     
     private double prevMouseX = 0;
     private double prevMouseY = 0;
@@ -53,6 +56,7 @@ public class Main {
         _program_3d.createUniform("modelMatrix");
         _program_3d.createUniform("lightSpaceMatrix");
         _program_3d.createUniform("matId");
+        _program_3d.createUniform("color");
         _program_3d.createUniform("isTextured");
         _program_3d.createUniform("textureTile");
         _program_3d.createUniform("depthMap");
@@ -105,7 +109,7 @@ public class Main {
         drawWalls();
         
         try {
-            scene.add(Mesh.fromFile("/res/models/plane.obj", new PhongMaterial(new Vector3f(0.6f, 0.6f, 0.6f), 0.2f, 10.0f)).translate(0.0f, -0.001f, 0.0f));
+            scene.add(Mesh.fromFile("/res/models/plane.obj", new PhongMaterial(new Vector3f(0.3f, 0.3f, 0.3f), 0.4f, 100.0f)).translate(0.0f, -0.001f, 0.0f));
             Collection logo = new Collection(new Mesh[] {
                 Mesh.fromFile("/res/models/logo/capital-t.obj", new PhongMaterial(new Vector3f(1.0f, 0.2f, 0.2f), 0.8f, 1000.0f)).translate(-13.0f, 0.0f, 0.0f),
                 Mesh.fromFile("/res/models/logo/e.obj", new PhongMaterial(new Vector3f(1.0f, 0.8f, 0.2f), 0.8f, 1000.0f)).translate(-9.0f, -3.0f, 0.0f),
@@ -169,6 +173,45 @@ public class Main {
                     case GLFW_KEY_E:
                         rotClockwise = 3;
                         break;
+                    case GLFW_KEY_ENTER: {
+                        int[] translationDown = new int[4];
+                        for (int i = 0; i < GameGrid.active.length; i++) {
+                            Block activeBlock;
+                            try {
+                                activeBlock = GameGrid.blocks.get(GameGrid.active[i]);
+                            } catch (ArrayIndexOutOfBoundsException err) {
+                                break;
+                            }
+                            Vector2f xzPos       = new Vector2f(activeBlock.getPos().x, activeBlock.getPos().z);
+        
+                            ArrayList<Integer> sameColumn = new ArrayList<>();
+                            iterateAllBlocks:
+                            for (Block block : GameGrid.blocks) {
+                                for (int a : GameGrid.active) {
+                                    if (GameGrid.blocks.get(a) == block) continue iterateAllBlocks;
+                                }
+            
+                                if (new Vector2f(block.getPos().x, block.getPos().z).equals(xzPos)) {
+                                    sameColumn.add(block.getPos().y);
+                                }
+                            }
+        
+                            if (sameColumn.size() == 0) {
+                                translationDown[i] = activeBlock.getPos().y + 1;
+                            } else {
+                                translationDown[i] = activeBlock.getPos().y - Collections.max(sameColumn);
+                            }
+                        }
+                        int min = 100;
+                        for (int t : translationDown) {
+                            if (t < min) min = t;
+                        }
+                        min--; // `min` is the furthest the active block can travel down without hitting anything.
+                        
+                        upward = -min;
+                        
+                        break;
+                    }
                 }
     
                 float rot = camera.getOrientation().y;

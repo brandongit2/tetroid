@@ -48,6 +48,7 @@ public class Renderer {
             
             program.setUniform("modelMatrix", mesh.getModelMatrix());
             program.setUniform("matId", mesh.getMaterial().matId());
+            program.setUniform("color", mesh.getMaterial().getColor());
             program.setUniform("opacity", mesh.getMaterial().getOpacity());
             program.setUniform("reflectivity", mesh.getMaterial().getReflectivity());
             program.setUniform("shininess", mesh.getMaterial().getShininess());
@@ -70,6 +71,7 @@ public class Renderer {
         for (Line line : scene.getLines()) {
             program.setUniform("modelMatrix", line.getModelMatrix());
             program.setUniform("matId", 0);
+            program.setUniform("color", line.getColor());
             program.setUniform("opacity", line.getOpacity());
     
             glBindVertexArray(line.getVao());

@@ -14,6 +14,11 @@ public class PlainMaterial implements Material {
         return this.color;
     }
     
+    public PlainMaterial setColor(Vector3f color) {
+        this.color = color;
+        return this;
+    }
+    
     public void setOpacity(float opacity) {
         this.opacity = opacity;
     }

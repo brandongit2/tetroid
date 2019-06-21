@@ -15,9 +15,11 @@ public class Line {
     private int      vao;
     private Matrix4f modelMatrix = new Matrix4f();
     
-    private float opacity;
+    private Vector3f color;
+    private float    opacity;
     
     public Line(Vector3f pos1, Vector3f pos2, Vector3f color, float opacity) {
+        this.color = color;
         this.opacity = opacity;
         
         this.vao = glGenVertexArrays();
@@ -31,17 +33,6 @@ public class Line {
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(0);
     
-        FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(6);
-        // Fill `colorBuffer` with the same color.
-        for (int i = 0; i < 6; i += 3) {
-            color.get(i, colorBuffer);
-        }
-        int colorVboId = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
-        glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
-        glVertexAttribPointer(3, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(3);
-    
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
@@ -52,6 +43,14 @@ public class Line {
     
     public Matrix4f getModelMatrix() {
         return this.modelMatrix;
+    }
+    
+    public void setColor(Vector3f color) {
+        this.color = color;
+    }
+    
+    public Vector3f getColor() {
+        return this.color;
     }
     
     public float getOpacity() {

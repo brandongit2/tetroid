@@ -6,7 +6,6 @@ in vec3 fragPos; // The position on the mesh represented by the current fragment
 in vec4 lightSpaceFragPos; // The position of the fragment in light space.
 in vec2 texCoord;
 in vec3 u_normal;
-in vec3 vertColor;
 
 layout (location = 0) out vec4 fragColor;
 
@@ -15,6 +14,7 @@ uniform sampler2D depthMap;
 
 uniform mat4  modelMatrix;
 uniform int   matId;
+uniform vec3  color;
 uniform int   isTextured;
 uniform float opacity;
 uniform vec3  ambient;
@@ -41,7 +41,7 @@ void main() {
     switch (matId) {
         case 0: {
             if (isTextured == 0) {
-                fragColor = vec4(vertColor, opacity);
+                fragColor = vec4(color, opacity);
             } else {
                 vec4 textured = texture(textureTile, texCoord);
                 fragColor = vec4(textured.xyz, textured.w * opacity);
@@ -85,12 +85,12 @@ void main() {
             projCoords = projCoords * 0.5 + 0.5;
             float closestDepth = texture(depthMap, projCoords.xy).r;
             float currentDepth = projCoords.z;
-            float bias = 0.005;
+            float bias = 0.0005;
             float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
             if (projCoords.z > 1.0) shadow = 0.0;
 
             if (isTextured == 0) {
-                fragColor = vec4((totalDiffuse * (1.0 - shadow) + ambient) * vertColor + totalSpecular * (1.0 - shadow), opacity);
+                fragColor = vec4((totalDiffuse * (1.0 - shadow) + ambient) * color + totalSpecular * (1.0 - shadow), opacity);
             } else {
                 vec4 textured = texture(textureTile, texCoord);
                 fragColor = vec4((totalDiffuse * (1.0 - shadow) + ambient) * textured.xyz + totalSpecular * (1.0 - shadow), textured.w * opacity);

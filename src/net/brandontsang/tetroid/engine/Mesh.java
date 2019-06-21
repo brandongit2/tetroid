@@ -6,7 +6,6 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
@@ -63,17 +62,6 @@ public class Mesh {
         glBufferData(GL_ARRAY_BUFFER, vertNormBuffer, GL_STATIC_DRAW);
         glVertexAttribPointer(2, 3, GL_FLOAT, false, 0, 0);
         glEnableVertexAttribArray(2);
-        
-        FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(this.numVerts * 3);
-        // Fill `colorBuffer` with the same color.
-        for (int i = 0; i < this.numVerts * 3; i += 3) {
-            material.getColor().get(i, colorBuffer);
-        }
-        int colorVboId = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
-        glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
-        glVertexAttribPointer(3, 3, GL_FLOAT, false, 0, 0);
-        glEnableVertexAttribArray(3);
     
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);

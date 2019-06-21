@@ -20,8 +20,8 @@ public class DepthMap {
     private Matrix4f lightProjection = new Matrix4f();
     private Matrix4f lightView       = new Matrix4f();
     
-    private static final int   SHADOW_WIDTH  = 2048;
-    private static final int   SHADOW_HEIGHT = 2048;
+    private static final int   SHADOW_WIDTH  = 4096;
+    private static final int   SHADOW_HEIGHT = 4096;
     private static final float MAP_WIDTH     = 20.0f;
     private static final float MAP_HEIGHT    = 20.0f;
     
@@ -42,6 +42,13 @@ public class DepthMap {
         this.lightProjection.ortho(
             -50.0f, 50.0f, -50.0f, 50.0f,
             -100.0f, 100.0f);
+        Vector3f lightDir = new Vector3f(light.getDirection());
+        lightDir.mul(-1);
+        this.lightView.lookAt(
+            lightDir,
+            new Vector3f(),
+            new Vector3f(0.0f, 1.0f, 0.0f)
+        );
         
         this.fbo = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, this.fbo);
@@ -68,16 +75,17 @@ public class DepthMap {
     }
     
     // Center the orthographic projection matrix on the camera position.
+    // Unused since the only shadows in the scene are at the origin.
     private void calulateLightView() {
         Vector3f cameraPos = new Vector3f(this.scene.getCurrentCamera().position);
         Vector3f lightDir = new Vector3f(light.getDirection());
-        
+
         cameraPos.y = 0.0f;
         cameraPos.mul(-1);
-        
+
         lightDir.mul(-1);
         lightDir.add(cameraPos);
-        
+
         this.lightView.identity();
         this.lightView.lookAt(
             lightDir,
@@ -87,8 +95,6 @@ public class DepthMap {
     }
     
     public void renderDepthMap() {
-        calulateLightView();
-        
         glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
         glBindFramebuffer(GL_FRAMEBUFFER, this.fbo);
         glClear(GL_DEPTH_BUFFER_BIT);

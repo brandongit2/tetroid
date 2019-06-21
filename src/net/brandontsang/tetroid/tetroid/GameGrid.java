@@ -1,109 +1,39 @@
 package net.brandontsang.tetroid.tetroid;
 
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 class GameGrid {
     static ArrayList<Block> blocks = new ArrayList<>();
     
     static boolean existsActiveTetromino = false;
-    private static int[] active = new int[4];
-    private static int pivot;
+    
+    public static int[]     active = new int[4];
+    private static Block[]  ghosts = new Block[4];
+    private static Vector3i pivot;
+    
+    static {
+        for (int i = 0; i < GameGrid.ghosts.length; i++) {
+            GameGrid.ghosts[i] = new Block(new Vector3f(1.0f, 1.0f, 1.0f), new Vector3i(0, -2, 0)).setOpacity(0.3f);
+            Main.scene.add(GameGrid.ghosts[i].getMesh());
+        }
+    }
     
     static void addTetromino() {
-        existsActiveTetromino = true;
-        int tetromino = (int) (Math.random() * 8);
-        switch (tetromino) {
-            case 0:
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 4)));
-                active[0] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[1] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 5)));
-                active[2] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 5)));
-                active[3] = blocks.size() - 1;
-                break;
-            case 1:
-                blocks.add(new Block(tetromino, new Vector3i(3, 17, 4)));
-                active[0] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 4)));
-                active[1] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[2] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(6, 17, 4)));
-                active[3] = blocks.size() - 1;
-                break;
-            case 2:
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[0] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 5)));
-                active[1] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 5)));
-                active[2] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(6, 17, 5)));
-                active[3] = blocks.size() - 1;
-                break;
-            case 3:
-                blocks.add(new Block(tetromino, new Vector3i(3, 17, 5)));
-                active[0] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 5)));
-                active[1] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 5)));
-                active[2] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[3] = blocks.size() - 1;
-                break;
-            case 4:
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 5)));
-                active[0] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 5)));
-                active[1] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[2] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(6, 17, 4)));
-                active[3] = blocks.size() - 1;
-                break;
-            case 5:
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 5)));
-                active[0] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 4)));
-                active[1] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[2] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 18, 4)));
-                active[3] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                break;
-            case 6:
-                blocks.add(new Block(tetromino, new Vector3i(4, 18, 4)));
-                active[0] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 4)));
-                active[1] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[2] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 5)));
-                active[3] = blocks.size() - 1;
-                break;
-            case 7:
-                blocks.add(new Block(tetromino, new Vector3i(4, 17, 4)));
-                active[0] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 4)));
-                active[1] = blocks.size() - 1;
-                pivot = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 17, 5)));
-                active[2] = blocks.size() - 1;
-                blocks.add(new Block(tetromino, new Vector3i(5, 18, 4)));
-                active[3] = blocks.size() - 1;
-                break;
+        GameGrid.existsActiveTetromino = true;
+        Tetromino tetromino = Tetromino.random();
+        for (int i = 0; i < tetromino.getPositions().length; i++) {
+            blocks.add(new Block(tetromino.getColor(), tetromino.getPositions()[i]));
+            active[i] = blocks.size() - 1;
+            GameGrid.ghosts[i].setColor(tetromino.getColor());
         }
+        GameGrid.pivot = tetromino.getPivot();
+        
+        updateGhosts();
     }
     
     static void translate(Vector3i pos) {
@@ -142,6 +72,9 @@ class GameGrid {
                 blocks.get(a).pos.add(pos, newPos);
                 blocks.get(a).setPos(newPos);
             }
+            GameGrid.pivot.add(pos);
+            
+            updateGhosts();
         }
     }
     
@@ -155,9 +88,8 @@ class GameGrid {
         for (int a : active) {
             if (a < 0) return;
             
-            Vector3i pivotPos = blocks.get(pivot).pos;
             Vector3i newPos = new Vector3i();
-            blocks.get(a).pos.sub(pivotPos, newPos);
+            blocks.get(a).pos.sub(pivot, newPos);
             for (int i = 0; i < amt; i++) {
                 switch (axis) {
                     case 0: {
@@ -180,7 +112,7 @@ class GameGrid {
                     }
                 }
             }
-            newPos.add(pivotPos);
+            newPos.add(pivot);
             
             if (newPos.x < 0 || newPos.x >= Main.GRID_WIDTH || newPos.y < 0 || newPos.y >= Main.GRID_HEIGHT || newPos.z < 0 || newPos.z >= Main.GRID_LENGTH) {
                 isValidMove = false;
@@ -199,9 +131,8 @@ class GameGrid {
         
         if (isValidMove) {
             for (int a : active) {
-                Vector3i pivotPos = blocks.get(pivot).pos;
                 Vector3i newPos   = new Vector3i();
-                blocks.get(a).pos.sub(pivotPos, newPos);
+                blocks.get(a).pos.sub(pivot, newPos);
                 for (int i = 0; i < amt; i++) {
                     switch (axis) {
                         case 0: {
@@ -224,8 +155,56 @@ class GameGrid {
                         }
                     }
                 }
-                newPos.add(pivotPos);
+                newPos.add(pivot);
                 blocks.get(a).setPos(newPos);
+            }
+            
+            updateGhosts();
+        }
+    }
+    
+    private static void updateGhosts() {
+        int[] translationDown = new int[4];
+        for (int i = 0; i < GameGrid.active.length; i++) {
+            Block activeBlock = GameGrid.blocks.get(GameGrid.active[i]);
+            Vector2f xzPos = new Vector2f(activeBlock.getPos().x, activeBlock.getPos().z);
+            
+            ArrayList<Integer> sameColumn = new ArrayList<>();
+            iterateAllBlocks:
+            for (Block block : GameGrid.blocks) {
+                for (int a : GameGrid.active) {
+                    if (GameGrid.blocks.get(a) == block) continue iterateAllBlocks;
+                }
+                
+                if (new Vector2f(block.getPos().x, block.getPos().z).equals(xzPos)) {
+                    sameColumn.add(block.getPos().y);
+                }
+            }
+            
+            if (sameColumn.size() == 0) {
+                translationDown[i] = activeBlock.getPos().y + 1;
+            } else {
+                translationDown[i] = activeBlock.getPos().y - Collections.max(sameColumn);
+            }
+        }
+        int min = 100;
+        for (int t : translationDown) {
+            if (t < min) min = t;
+        }
+        min--; // `min` is the furthest the active block can travel down without hitting anything.
+        
+        ArrayList<Integer> activeHeights = new ArrayList<>();
+        for (int i = 0; i < GameGrid.active.length; i++) {
+            activeHeights.add(GameGrid.blocks.get(GameGrid.active[i]).getPos().y);
+        }
+        int activeHeight = Collections.max(activeHeights) - Collections.min(activeHeights) + 1;
+        
+        for (int i = 0; i < GameGrid.active.length; i++) {
+            if (min >= activeHeight) {
+                Block activeBlock = GameGrid.blocks.get(GameGrid.active[i]);
+                GameGrid.ghosts[i].setPos(new Vector3i(activeBlock.getPos()).add(0, -min, 0));
+            } else {
+                GameGrid.ghosts[i].setPos(new Vector3i(0, -2, 0));
             }
         }
     }
@@ -235,6 +214,10 @@ class GameGrid {
         existsActiveTetromino = false;
         for (int i = 0; i < active.length; i++) {
             active[i] = -1;
+        }
+        
+        for (Block ghost : GameGrid.ghosts) {
+            ghost.setPos(new Vector3i(0, -2, 0));
         }
     }
     

@@ -21,43 +21,17 @@ import java.io.IOException;
 public class Block {
     Mesh     mesh;
     Vector3i pos;
+    float    opacity = 1.0f;
     
-    public Block(int type, Vector3i pos) {
+    public Block(Tetromino color, Vector3i pos) {
+        this(color.getColor(), pos);
+    }
+    
+    public Block(Vector3f color, Vector3i pos) {
         this.pos = pos;
         
-        Vector3f color;
-        switch (type) {
-            case 0:
-                color = new Vector3f(1.0f, 1.0f, 0.0f);
-                break;
-            case 1:
-                color = new Vector3f(0.0f, 1.0f, 1.0f);
-                break;
-            case 2:
-                color = new Vector3f(1.0f, 0.0f, 1.0f);
-                break;
-            case 3:
-                color = new Vector3f(0.0f, 0.0f, 1.0f);
-                break;
-            case 4:
-                color = new Vector3f(0.0f, 1.0f, 0.0f);
-                break;
-            case 5:
-                color = new Vector3f(0.2f, 0.2f, 0.2f);
-                break;
-            case 6:
-                color = new Vector3f(0.6f, 0.6f, 0.6f);
-                break;
-            case 7:
-                color = new Vector3f(0.5f, 0.2f, 0.2f);
-                break;
-            default:
-                color = new Vector3f(1.0f, 1.0f, 1.0f);
-                break;
-        }
-        
         try {
-            this.mesh = Mesh.fromFile("/res/models/block.obj", new PhongMaterial(color, 0.5f, 1000.0f)).translate(pos.x, pos.y, pos.z);
+            this.mesh = Mesh.fromFile("/res/models/block.obj", new PhongMaterial(color, 0.8f, 1000.0f)).translate(pos.x, pos.y, pos.z);
         } catch (IOException err) {
             err.printStackTrace();
             System.exit(1);
@@ -71,6 +45,17 @@ public class Block {
     
     Vector3i getPos() {
         return this.pos;
+    }
+    
+    public Block setColor(Vector3f color) {
+        this.mesh.getMaterial().setColor(color);
+        return this;
+    }
+    
+    public Block setOpacity(float opacity) {
+        this.opacity = opacity;
+        this.mesh.getMaterial().setOpacity(opacity);
+        return this;
     }
     
     public Mesh getMesh() {
