@@ -6,16 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c0ac0490-decf-4a8d-8e8e-7bfc4a8fe001" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/images/earth.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/gui/Font.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/engine/gui/Font.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameGrid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/GameStates.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Gui.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Gui.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java" afterDir="false" />
-    </list>
+    <list default="true" id="c0ac0490-decf-4a8d-8e8e-7bfc4a8fe001" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -95,8 +86,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="94" column="67" selection-start-line="94" selection-start-column="67" selection-end-line="94" selection-end-column="67" />
+            <state relative-caret-position="330">
+              <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#676#2963#1" />
@@ -436,7 +427,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1719" height="932" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4952199" visible="true" weight="0.173181" />
       <window_info id="Structure" order="1" sideWeight="0.50384617" side_tool="true" weight="0.15874925" />
@@ -446,7 +436,7 @@
       <window_info id="Favorites" order="5" sideWeight="0.5047801" side_tool="true" weight="0.16957305" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32948717" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49789536" visible="true" weight="0.32948717" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49789536" weight="0.32948717" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -932,8 +922,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/net/brandontsang/tetroid/tetroid/RenderLoop.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="94" column="67" selection-start-line="94" selection-start-column="67" selection-end-line="94" selection-end-column="67" />
+        <state relative-caret-position="330">
+          <caret line="82" column="5" lean-forward="true" selection-start-line="82" selection-start-column="5" selection-end-line="82" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#676#2963#1" />

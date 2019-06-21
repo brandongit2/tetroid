@@ -108,7 +108,7 @@ public class Main {
         drawWalls();
         
         try {
-            scene.add(Mesh.fromFile("/res/models/plane.obj", new PhongMaterial(new Vector3f(0.3f, 0.3f, 0.3f), 0.4f, 100.0f)).translate(0.0f, -0.001f, 0.0f));
+            scene.add(Mesh.fromFile("/res/models/plane.obj", new PhongMaterial(new Vector3f(0.3f, 0.3f, 0.3f), 0.4f, 100.0f)).translate(0.0f, -0.001f, 0.0f).scale(10.0f));
             Collection logo = new Collection(new Mesh[] {
                 Mesh.fromFile("/res/models/logo/capital-t.obj", new PhongMaterial(new Vector3f(1.0f, 0.2f, 0.2f), 0.8f, 1000.0f)).translate(-13.0f, 0.0f, 0.0f),
                 Mesh.fromFile("/res/models/logo/e.obj", new PhongMaterial(new Vector3f(1.0f, 0.8f, 0.2f), 0.8f, 1000.0f)).translate(-9.0f, -3.0f, 0.0f),
